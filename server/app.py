@@ -1,10 +1,19 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
 from extensions import db, migrate, ma
-# from model import User, Product, Order
+from config import Config
+from models import User, Product, Order, Review
 
 app = Flask(__name__)
-CORS(app)  
+app.config.from_object(Config)
+
+# Initialize extensions here
+db.init_app(app)
+migrate.init_app(app, db)
+ma.init_app(app)
+
+# Enable CORS (for React frontend requests)
+CORS(app)
 
 @app.route("/")
 def hello():
