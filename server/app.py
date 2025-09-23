@@ -136,6 +136,13 @@ class ProductResource(Resource):
 api.add_resource(ProductsResource, "/api/products")
 api.add_resource(ProductResource, "/api/products/<int:product_id>")
 
+#---orders
+class OrdersResource(Resource):
+    def get(self):
+        orders = Order.query.all()
+        return [order.to_dict() for order in orders], 200
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)
