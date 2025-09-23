@@ -43,6 +43,14 @@ class UserResource(Resource):
       db.session.add(new_user)
       db.session.commit()
       return new_user.to_dict(), 201 
+    
+
+class UserResource(Resource):
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+        return user.to_dict(), 200
 
 
 # Register the resource
