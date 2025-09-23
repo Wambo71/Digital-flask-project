@@ -1,12 +1,23 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_cors import CORS
+from extensions import db, migrate, ma
+from config import Config
+from models import User, Product, Order, Review
 
 app = Flask(__name__)
-CORS(app)  # allow frontend requests
+app.config.from_object(Config)
+
+# Initialize extensions here
+db.init_app(app)
+migrate.init_app(app, db)
+ma.init_app(app)
+
+# Enable CORS (for React frontend requests)
+CORS(app)
 
 @app.route("/")
 def hello():
     return "<h1>Welcome to backend</h1>"
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=True, port=5500)
