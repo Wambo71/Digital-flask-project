@@ -3,14 +3,14 @@
 import random
 from faker import Faker
 
-from app import app   # ✅ import the app directly
+from app import app  
 from extensions import db
 from models import User, Product, Order, Review
 
 fake = Faker()
 
 with app.app_context():
-    print("🌱 Seeding database...")
+    print(" Seeding database...")
 
     # ---- Clear old data ----
     print("Deleting old data...")
@@ -71,4 +71,4 @@ with app.app_context():
         db.session.add(review)
     db.session.commit()
 
-    print("✅ Done seeding!")
+    print(" Done seeding!")
