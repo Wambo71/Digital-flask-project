@@ -143,6 +143,13 @@ class OrdersResource(Resource):
         return [order.to_dict() for order in orders], 200
     
 
+    class OrderResource(Resource):
+      def get(self, order_id):
+        order = Order.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+        return order.to_dict(), 200
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)
