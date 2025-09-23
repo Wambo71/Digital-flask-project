@@ -65,9 +65,21 @@ class UserResource(Resource):
 
         db.session.commit()
         return user.to_dict(), 200
+    
+    def delete(self, user_id):
+        
+        user = User.query.get(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        db.session.delete(user)
+        db.session.commit()
+        return {"message": f"User {user_id} deleted"}, 200
 
 
 
+
+api.add_resource(UserResource, "/api/users/<int:user_id>")
 # Register the resource
 api.add_resource(UserResource, "/api/users")
 
