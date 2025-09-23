@@ -24,7 +24,7 @@ def hello():
 
 
 
-class UserResource(Resource):
+class UsersResource(Resource):
     def get(self):
         users = User.query.all()
         return [user.to_dict() for user in users], 200
@@ -80,8 +80,30 @@ class UserResource(Resource):
 
 
 api.add_resource(UserResource, "/api/users/<int:user_id>")
-# Register the resource
-api.add_resource(UserResource, "/api/users")
+
+api.add_resource(UsersResource, "/api/users")
+
+#products
+class ProductsResource(Resource):
+    def get(self):
+        products = Product.query.all()
+        return [product.to_dict() for product in products], 200
+    
+    def post(self):
+        data = request.get_json()
+        if not data.get("name") or not data.get("price") or not data.get("seller_id"):
+            return {"error": "name, price, and seller_id are required"}, 400
+
+        new_product = Product(
+            name=data["name"],
+            description=data.get("description"),
+            price=data["price"],
+            seller_id=data["seller_id"],
+            stock=data.get("stock", 0)
+        )
+        db.session.add(new_product)
+        db.session.commit()
+        return new_product.to_dict(), 201
 
 
 if __name__ == "__main__":
