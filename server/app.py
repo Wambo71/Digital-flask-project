@@ -143,12 +143,91 @@ class OrdersResource(Resource):
         return [order.to_dict() for order in orders], 200
     
 
-    class OrderResource(Resource):
+class OrderResource(Resource):
       def get(self, order_id):
         order = Order.query.get(order_id)
         if not order:
             return {"error": "Order not found"}, 404
         return order.to_dict(), 200
+      
+      def delete(self, order_id):
+        order = Order.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+
+        db.session.delete(order)
+        db.session.commit()
+        return {"message": f"Order {order_id} deleted"}, 200
+      
+api.add_resource(OrdersResource, "/api/orders")
+api.add_resource(OrderResource, "/api/orders/<int:order_id>") 
+
+#--reviewa
+# ---reviews
+class ReviewsResource(Resource):
+    def get(self):
+        reviews = Review.query.all()
+        return [review.to_dict() for review in reviews], 200
+    
+    def post(self):
+        data = request.get_json()
+
+        if not data.get("user_id") or not data.get("product_id") or not data.get("rating"):
+            return {"error": "user_id, product_id, and rating are required"}, 400
+
+        # Validate product and user exist
+        user = User.query.get(data["user_id"])
+        product = Product.query.get(data["product_id"])
+        if not user:
+            return {"error": f"User {data['user_id']} not found"}, 404
+        if not product:
+            return {"error": f"Product {data['product_id']} not found"}, 404
+
+        new_review = Review(
+            user_id=data["user_id"],
+            product_id=data["product_id"],
+            rating=data["rating"],
+            comment=data.get("comment", "")
+        )
+        db.session.add(new_review)
+        db.session.commit()
+        return new_review.to_dict(), 201
+
+
+class ReviewResource(Resource):
+    def get(self, review_id):
+        review = Review.query.get(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
+        return review.to_dict(), 200
+    
+    def put(self, review_id):
+        review = Review.query.get(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
+
+        data = request.get_json()
+        review.rating = data.get("rating", review.rating)
+        review.comment = data.get("comment", review.comment)
+
+        db.session.commit()
+        return review.to_dict(), 200
+    
+    def delete(self, review_id):
+        review = Review.query.get(review_id)
+        if not review:
+            return {"error": "Review not found"}, 404
+
+        db.session.delete(review)
+        db.session.commit()
+        return {"message": f"Review {review_id} deleted"}, 200
+
+
+# Register resources
+api.add_resource(ReviewsResource, "/api/reviews")
+api.add_resource(ReviewResource, "/api/reviews/<int:review_id>")
+
+
 
 
 if __name__ == "__main__":
