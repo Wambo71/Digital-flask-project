@@ -51,6 +51,21 @@ class UserResource(Resource):
         if not user:
             return {"error": "User not found"}, 404
         return user.to_dict(), 200
+    
+    def put(self, user_id):
+        
+        user = User.query.get(user_id)
+        if not user:
+            return {"error": "User not found"}, 404
+
+        data = request.get_json()
+        user.username = data.get("username", user.username)
+        user.email = data.get("email", user.email)
+        user.password_hash = data.get("password_hash", user.password_hash)
+
+        db.session.commit()
+        return user.to_dict(), 200
+
 
 
 # Register the resource
