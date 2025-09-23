@@ -16,7 +16,7 @@ class User(db.Model, SerializerMixin):
     reviews = db.relationship("Review", back_populates="user", cascade="all")
 
 
-class Product(db.Model):
+class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
