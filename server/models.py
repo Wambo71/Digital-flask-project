@@ -31,6 +31,8 @@ class Product(db.Model, SerializerMixin):
     status = db.Column(db.String(50), nullable=False, default="available")
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
+    serialize_rules = ("-seller.password_hash", "-order_items", "-reviews")
+
     # Relationships
     seller = db.relationship("User", back_populates="products")
     order_items = db.relationship("OrderItem", back_populates="product", cascade="all, delete-orphan")
@@ -50,6 +52,8 @@ class Order(db.Model, SerializerMixin):
     quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
+    serialize_rules = ("-buyer.password_hash", "-order_items")
+
     # Relationships
     buyer = db.relationship("User", back_populates="orders")
     order_items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
@@ -67,6 +71,8 @@ class OrderItem(db.Model, SerializerMixin):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Integer, nullable=False)
 
+    serialize_rules = ("-order.buyer.password_hash", "-product.seller.password_hash")
+
     # Relationships
     order = db.relationship("Order", back_populates="order_items")
     product = db.relationship("Product", back_populates="order_items")
@@ -83,6 +89,8 @@ class Review(db.Model, SerializerMixin):
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text)
+
+    serialize_rules = ("-user.password_hash", "-product.seller.password_hash")
 
     # Relationships
     user = db.relationship("User", back_populates="reviews")
