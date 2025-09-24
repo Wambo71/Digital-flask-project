@@ -4,10 +4,10 @@ import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
-import Checkout from "./pages/Checkout";
-import Login from "./pages/Login";
+import Checkout from "./pages/checkout";
+import Login from "./pages/LoginPage";
 import Profile from "./pages/Profile";
-import ProtectedRoute from "./components/ProtectedRoute";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   return (

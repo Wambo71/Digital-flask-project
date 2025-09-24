@@ -1,4 +1,3 @@
-
 import { NavLink } from "react-router-dom";
 
 function NavBar() {
@@ -7,12 +6,10 @@ function NavBar() {
       <NavLink to="/">Home</NavLink>
       <NavLink to="/products">Products</NavLink>
       <NavLink to="/cart">Cart</NavLink>
-      <NavLink to="/Login_page">Login</NavLink>
-      <NavLink to="/profile">Prof</NavLink>
-      <NavLink to="/login">Login</NavLink> 
+      <NavLink to="/login">Login</NavLink>
+      <NavLink to="/profile">Profile</NavLink>
     </nav>
   );
 }
 
 export default NavBar;
-
