@@ -8,7 +8,7 @@ function NavBar() {
       <NavLink to="/products">Products</NavLink>
       <NavLink to="/cart">Cart</NavLink>
       <NavLink to="/Login_page">Login</NavLink>
-      <NavLink to="/profile">Profile</NavLink>
+      <NavLink to="/profile">Prof</NavLink>
     </nav>
   );
 }
