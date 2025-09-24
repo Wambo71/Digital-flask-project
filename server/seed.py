@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import random
-from app import app   # ✅ import the app directly
 from extensions import db
 from models import User, Product, Order, Review
 from faker import Faker
@@ -10,8 +9,7 @@ fake = Faker()
 
 with app.app_context():
     print("🌱 Seeding database...")
-    db.drop_all()
-    db.create_all()
+  
 
     # ---- USERS ----
     print("Seeding users...")
@@ -228,4 +226,4 @@ with app.app_context():
     db.session.add_all([review1, review2, review3, review4, review5])
     db.session.commit()
 
-    print("✅ Done seeding!")
+    print(" Done seeding!")

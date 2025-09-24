@@ -9,6 +9,8 @@ class User(db.Model, SerializerMixin):
     email = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(200), nullable=False)
 
+    serialize_rules = ("-password_hash", "-orders", "-reviews", "-products")
+
     # Relationships
     products = db.relationship("Product", back_populates="seller", cascade="all, delete-orphan")
     orders = db.relationship("Order", back_populates="buyer", cascade="all, delete-orphan")
