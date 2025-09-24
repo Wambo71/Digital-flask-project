@@ -27,8 +27,9 @@ class Product(db.Model, SerializerMixin):
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
     price = db.Column(db.Integer, nullable=False)
-    seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     stock = db.Column(db.Integer, nullable=False, default=0)
+    status = db.Column(db.String(50), nullable=False, default="available")
+    seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     # Relationships
     seller = db.relationship("User", back_populates="products")
@@ -44,8 +45,8 @@ class Order(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     buyer_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    total_amount = db.Column(db.Integer, nullable=False)
-    status = db.Column(db.String(50), nullable=False, default="pending")
+    total_amount = db.Column(db.Float, nullable=False)
+    status = db.Column(db.String(50), nullable=False, default="available")
     quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 

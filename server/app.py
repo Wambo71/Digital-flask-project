@@ -18,11 +18,6 @@ api = Api(app)
 CORS(app)
 
 
-@app.route("/")
-def hello():
-    return "<h1>Welcome to backend</h1>"
-
-
 # ---users
 class UsersResource(Resource):
     def get(self):

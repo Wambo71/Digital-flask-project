@@ -1,8 +1,8 @@
-"""initial migration
+"""altered database
 
-Revision ID: 399ef027b060
+Revision ID: de11cb07857b
 Revises: 
-Create Date: 2025-09-23 16:08:18.798607
+Create Date: 2025-09-23 20:25:28.673449
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '399ef027b060'
+revision = 'de11cb07857b'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,6 +32,7 @@ def upgrade():
     sa.Column('buyer_id', sa.Integer(), nullable=False),
     sa.Column('total_amount', sa.Integer(), nullable=False),
     sa.Column('status', sa.String(length=50), nullable=False),
+    sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.ForeignKeyConstraint(['buyer_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -42,6 +43,7 @@ def upgrade():
     sa.Column('description', sa.Text(), nullable=True),
     sa.Column('price', sa.Integer(), nullable=False),
     sa.Column('stock', sa.Integer(), nullable=False),
+    sa.Column('status', sa.String(length=50), nullable=False),
     sa.Column('seller_id', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['seller_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
@@ -58,7 +60,7 @@ def upgrade():
     )
     op.create_table('reviews',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=False),
+    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('rating', sa.Integer(), nullable=False),
     sa.Column('comment', sa.Text(), nullable=True),
