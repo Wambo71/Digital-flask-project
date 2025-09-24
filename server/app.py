@@ -162,7 +162,7 @@ class OrderResource(Resource):
 api.add_resource(OrdersResource, "/api/orders")
 api.add_resource(OrderResource, "/api/orders/<int:order_id>") 
 
-#--reviewa
+
 # ---reviews
 class ReviewsResource(Resource):
     def get(self):
