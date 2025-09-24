@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+import server.app as app
 import random
 from extensions import db
 from models import User, Product, Order, Review
