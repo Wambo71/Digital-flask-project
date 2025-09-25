@@ -6,7 +6,7 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/checkout";
 import Login from "./pages/LoginPage";
-
+import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
@@ -20,6 +20,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard/>} />
         <Route
           path="/profile"
           element={

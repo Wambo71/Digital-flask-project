@@ -1,12 +1,13 @@
+import CheckoutForm from "../components/CheckoutForm";
+
 function Checkout() {
   return (
     <div>
       <h1>Checkout</h1>
-      <form>
-        <input type="text" placeholder="Full Name" />
-        <input type="text" placeholder="Address" />
+      
+        <CheckoutForm/>
         <button type="submit">Place Order</button>
-      </form>
+      
     </div>
   );
 }

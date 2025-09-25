@@ -126,6 +126,8 @@ class ProductResource(Resource):
         db.session.delete(product)
         db.session.commit()
         return {"message": f"Product {product_id} deleted"}, 200
+    
+    
 
 
 api.add_resource(ProductsResource, "/api/products")
@@ -223,7 +225,7 @@ api.add_resource(ReviewsResource, "/api/reviews")
 api.add_resource(ReviewResource, "/api/reviews/<int:review_id>")
 
 
-
+#
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)

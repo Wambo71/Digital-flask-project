@@ -1,7 +1,10 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+
   const initialValues = { email: "", password: "" };
 
   const validationSchema = Yup.object({
@@ -21,6 +24,9 @@ function Login() {
       .then((data) => {
         console.log("Response:", data);
         alert("Login successful (mock)");
+
+        //  Redirect to dashboard
+        navigate("/dashboard");
       })
       .catch((err) => console.error(err))
       .finally(() => setSubmitting(false));
