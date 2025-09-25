@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-import server.app as app
 import random
+from app import app
 from extensions import db
 from models import User, Product, Order, Review
 from faker import Faker
@@ -17,27 +16,32 @@ with app.app_context():
     user1 = User(
         username="alice",
         email="alice@example.com",
-        password_hash=fake.password()
+        password_hash=fake.password(),
+        role="seller"
     )
     user2 = User(
         username="bob",
         email="bob@example.com",
-        password_hash=fake.password()
+        password_hash=fake.password(),
+        role="buyer"
     )
     user3 = User(
         username="charlie",
         email="charlie@example.com",
-        password_hash=fake.password()
+        password_hash=fake.password(),
+        role="buyer"
     )
     user4 = User(
         username="dave",
         email="dave@example.com",
-        password_hash=fake.password()
+        password_hash=fake.password(),
+        role="buyer"
     )
     user5 = User(
         username="eve",
         email="eve@example.com",
-        password_hash=fake.password()
+        password_hash=fake.password(),
+        role="seller"
     )
     users.extend([user1, user2, user3, user4, user5])
     for user in users:

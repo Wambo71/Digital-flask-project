@@ -1,5 +1,6 @@
 from extensions import db
 from sqlalchemy_serializer import SerializerMixin
+# import validates
 
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
@@ -8,6 +9,7 @@ class User(db.Model, SerializerMixin):
     username = db.Column(db.String(50), nullable=False, unique=True)
     email = db.Column(db.String(50), nullable=False, unique=True)
     password_hash = db.Column(db.String(200), nullable=False)
+    role = db.Column(db.String(50), nullable=False, default="buyer")
 
     serialize_rules = ("-password_hash", "-orders", "-reviews", "-products")
 
@@ -18,6 +20,8 @@ class User(db.Model, SerializerMixin):
 
     def __repr__(self):
         return f"<User {self.username}>"
+    
+# @validates('email')
 
 
 class Product(db.Model, SerializerMixin):
@@ -49,7 +53,6 @@ class Order(db.Model, SerializerMixin):
     buyer_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     total_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False, default="available")
-    quantity = db.Column(db.Integer, nullable=False, default=1)
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     serialize_rules = ("-buyer.password_hash", "-order_items")
