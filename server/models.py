@@ -28,19 +28,20 @@ class User(db.Model, SerializerMixin):
 
     
     @validates('email')
-    def validate_email(self, email):
+    def validate_email(self, key, email):
         if '@' not in email:
             raise ValueError("Invalid email format")
         return email
     @validates('role')
-    def validate_role(self, role):
+    def validate_role(self, key, role):
         if role not in ['buyer', 'seller']:
             raise ValueError("Role must either be buyer or seller")
         return role
     @validates("username")
-    def validate_username(self, username):
-        if not username or len(username) < 3:
-            raise ValueError("Username must be ")
+    def validate_username(self, key, username):
+        if not len(username) > 3:
+            raise ValueError("Username must be more than 3 characters")
+        return username
 
     def __repr__(self):
         return f"<User {self.username}>"
@@ -48,7 +49,7 @@ class User(db.Model, SerializerMixin):
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
-    serialize_rules = ("-seller.password_hash", "-order_items", "-reviews")
+    serialize_rules = ("-seller.password_hash", "-order_items", "-reviews", "-reviews.user.password_hash")
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -57,14 +58,15 @@ class Product(db.Model, SerializerMixin):
     stock = db.Column(db.Integer, nullable=False, default=0)
     status = db.Column(db.String(50), nullable=False, default="available")
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    image_url = db.Column(db.Text(300))
 
     seller = db.relationship("User", back_populates="products")
     order_items = db.relationship("OrderItem", back_populates="product", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="product", cascade="all, delete-orphan")
 
     @validates("status")
-    def validate_status(self, status):
-        if status not in ["available", "out_of_stock", "reserved", "sold_out"]:
+    def validate_status(self, key, status):
+        if status not in ["available", "out of stock", "reserved", "sold out"]:
             raise ValueError("Invalid product status")
         return status
 
@@ -82,10 +84,12 @@ class Order(db.Model, SerializerMixin):
     total_amount = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(50), nullable=False, default="pending")
     created_at = db.Column(db.DateTime, server_default=db.func.now())
+    quantity = db.Column(db.Integer, nullable=False, default=1)
 
     @validates('status')
-    def validate_status(self, status):
-        if status not in ['pending', 'shipped', 'delivered', 'canceled']:
+    def validate_status(self, key, status):
+        allowed = ["pending", "completed", "cancelled", "shipped", "delivered"]
+        if status not in allowed:
             raise ValueError("Invalid order status")
         return status
 
@@ -99,13 +103,13 @@ class Order(db.Model, SerializerMixin):
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
 
+    serialize_rules = ("-order.buyer.password_hash", "-product.seller.password_hash")
+
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False)
     product_id = db.Column(db.Integer, db.ForeignKey("products.id"), nullable=False)
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Numeric(10, 2), nullable=False)
-
-    serialize_rules = ("-order.buyer.password_hash", "-product.seller.password_hash")
 
     order = db.relationship("Order", back_populates="order_items")
     product = db.relationship("Product", back_populates="order_items")
@@ -126,7 +130,7 @@ class Review(db.Model, SerializerMixin):
     comment = db.Column(db.Text)
 
     @validates('rating')
-    def validate_rating(self, rating):
+    def validate_rating(self, key, rating):
         if rating < 1 or rating > 5:
             raise ValueError("Rating must be between 1 and 5")
         return rating

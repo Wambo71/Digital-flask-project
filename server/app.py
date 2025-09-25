@@ -5,7 +5,7 @@ from flask_restful import Api, Resource
 from flask_bcrypt import bcrypt
 from extensions import db, migrate
 from config import Config
-from models import User, Product, Order, Review
+from models import User, Product, Order, Review, OrderItem
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -175,6 +175,40 @@ class OrderResource(Resource):
         order.total_amount = data.get("total_amount", order.total_amount)
         db.session.commit()
         return order.to_dict(), 200
+    
+class OrderItemResource(Resource):
+    def get(self):
+        orders = OrderItem.query.all()
+        return [order.to_dict() for order in orders], 200
+    
+class OrderItemsResource(Resource):
+    def get(self, order_id):
+        order = OrderItem.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+        return order.to_dict(), 200
+    
+    def post(self, order_id):
+        order = OrderItem.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+        data = request.get_json()
+        order.status = data.get("status", order.status)
+        order.quantity = data.get("quantity", order.quantity)
+        order.total_amount = data.get("total_amount", order.total_amount)
+        db.session.commit()
+        return order.to_dict(), 200
+    
+    def delete(Self, order_id):
+        order = OrderItem.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+
+        db.session.delete(order)
+        db.session.commit()
+        return {"message": f"Order {order_id} deleted"}, 200
+
+
 
 class ReviewsResource(Resource):
     def get(self):
@@ -242,6 +276,8 @@ api.add_resource(OrdersResource, "/orders")
 api.add_resource(OrderResource, "/orders/<int:order_id>") 
 api.add_resource(ProductsResource, "/products")
 api.add_resource(ProductResource, "/products/<int:product_id>")
+api.add_resource(OrderItemResource, "/order_items")
+api.add_resource(OrderItemsResource, "/order_items/<int:order_id>")
 
 
 
