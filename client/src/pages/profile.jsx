@@ -1,7 +1,6 @@
-// src/pages/Profile.jsx
 import { useEffect, useState } from "react";
-import { useAuth } from "../auth";
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Profile() {
   const { user } = useAuth();

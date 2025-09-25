@@ -1,24 +1,42 @@
-from flask import Flask, request
+from flask import Flask, request, session
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
+from flask_bcrypt import bcrypt
 from extensions import db, migrate
 from config import Config
-from models import User, Product, Order, Review
+from models import User, Product, Order, Review, OrderItem
 
 app = Flask(__name__)
 app.config.from_object(Config)
 
-# Initialize extensions
 db.init_app(app)
 migrate.init_app(app, db)
 api = Api(app)
-
-# Enable CORS
+bcrypt = bcrypt
 CORS(app)
 
+@app.route("/login", methods=["POST"])
+def login():
+    data = request.get_json()
+    email = data.get("email")
+    password = data.get("password")
+    if not email or not password:
+        return {"error": "Email and password are required"}, 400
+    
+    user = User.query.filter_by(email=email).first()
+    if user and user.chack_password(password):
+        session['user_id'] = user.id
+        session['role'] = user.role
+        return {"message": "Login successful", "user": user.to_dict()}, 200
+    return {"error": "Invalid email or password"}, 401
 
-# ---users
+@app.route("/logout", methods=["POST"])
+def logout():
+    session.clear()
+    return {"message": "Logged out successfully"}, 200
+
+
 class UsersResource(Resource):
     def get(self):
         users = User.query.all()
@@ -33,7 +51,8 @@ class UsersResource(Resource):
         new_user = User(
             username=data["username"],
             email=data["email"],
-            password_hash=data["password_hash"]
+            password_hash=data["password_hash"],
+            role=data.get("role", "buyer")
         )
         db.session.add(new_user)
         db.session.commit()
@@ -70,11 +89,6 @@ class UserResource(Resource):
         return {"message": f"User {user_id} deleted"}, 200
 
 
-api.add_resource(UsersResource, "/api/users")
-api.add_resource(UserResource, "/api/users/<int:user_id>")
-
-
-# ---products
 class ProductsResource(Resource):
     def get(self):
         products = Product.query.all()
@@ -128,10 +142,7 @@ class ProductResource(Resource):
         return {"message": f"Product {product_id} deleted"}, 200
 
 
-api.add_resource(ProductsResource, "/api/products")
-api.add_resource(ProductResource, "/api/products/<int:product_id>")
 
-#---orders
 class OrdersResource(Resource):
     def get(self):
         orders = Order.query.all()
@@ -139,13 +150,13 @@ class OrdersResource(Resource):
     
 
 class OrderResource(Resource):
-      def get(self, order_id):
+    def get(self, order_id):
         order = Order.query.get(order_id)
         if not order:
             return {"error": "Order not found"}, 404
         return order.to_dict(), 200
       
-      def delete(self, order_id):
+    def delete(self, order_id):
         order = Order.query.get(order_id)
         if not order:
             return {"error": "Order not found"}, 404
@@ -154,11 +165,51 @@ class OrderResource(Resource):
         db.session.commit()
         return {"message": f"Order {order_id} deleted"}, 200
       
-api.add_resource(OrdersResource, "/api/orders")
-api.add_resource(OrderResource, "/api/orders/<int:order_id>") 
+    def put(self, order_id):
+        order = Order.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+        data = request.get_json()
+        order.status = data.get("status", order.status)
+        order.quantity = data.get("quantity", order.quantity)
+        order.total_amount = data.get("total_amount", order.total_amount)
+        db.session.commit()
+        return order.to_dict(), 200
+    
+class OrderItemResource(Resource):
+    def get(self):
+        orders = OrderItem.query.all()
+        return [order.to_dict() for order in orders], 200
+    
+class OrderItemsResource(Resource):
+    def get(self, order_id):
+        order = OrderItem.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+        return order.to_dict(), 200
+    
+    def post(self, order_id):
+        order = OrderItem.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+        data = request.get_json()
+        order.status = data.get("status", order.status)
+        order.quantity = data.get("quantity", order.quantity)
+        order.total_amount = data.get("total_amount", order.total_amount)
+        db.session.commit()
+        return order.to_dict(), 200
+    
+    def delete(Self, order_id):
+        order = OrderItem.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+
+        db.session.delete(order)
+        db.session.commit()
+        return {"message": f"Order {order_id} deleted"}, 200
 
 
-# ---reviews
+
 class ReviewsResource(Resource):
     def get(self):
         reviews = Review.query.all()
@@ -170,7 +221,6 @@ class ReviewsResource(Resource):
         if not data.get("user_id") or not data.get("product_id") or not data.get("rating"):
             return {"error": "user_id, product_id, and rating are required"}, 400
 
-        # Validate product and user exist
         user = User.query.get(data["user_id"])
         product = Product.query.get(data["product_id"])
         if not user:
@@ -218,9 +268,17 @@ class ReviewResource(Resource):
         return {"message": f"Review {review_id} deleted"}, 200
 
 
-# Register resources
-api.add_resource(ReviewsResource, "/api/reviews")
-api.add_resource(ReviewResource, "/api/reviews/<int:review_id>")
+api.add_resource(ReviewsResource, "/reviews")
+api.add_resource(ReviewResource, "/reviews/<int:review_id>")
+api.add_resource(UsersResource, "/users")
+api.add_resource(UserResource, "/users/<int:user_id>")
+api.add_resource(OrdersResource, "/orders")
+api.add_resource(OrderResource, "/orders/<int:order_id>") 
+api.add_resource(ProductsResource, "/products")
+api.add_resource(ProductResource, "/products/<int:product_id>")
+api.add_resource(OrderItemResource, "/order_items")
+api.add_resource(OrderItemsResource, "/order_items/<int:order_id>")
+
 
 
 
