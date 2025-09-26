@@ -1,8 +1,8 @@
-"""altered database
+"""made reviews table
 
-Revision ID: de11cb07857b
+Revision ID: 7ee0b50bc30d
 Revises: 
-Create Date: 2025-09-23 20:25:28.673449
+Create Date: 2025-09-25 18:43:09.299617
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'de11cb07857b'
+revision = '7ee0b50bc30d'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -23,6 +23,7 @@ def upgrade():
     sa.Column('username', sa.String(length=50), nullable=False),
     sa.Column('email', sa.String(length=50), nullable=False),
     sa.Column('password_hash', sa.String(length=200), nullable=False),
+    sa.Column('role', sa.String(length=50), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
@@ -30,10 +31,10 @@ def upgrade():
     op.create_table('orders',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('buyer_id', sa.Integer(), nullable=False),
-    sa.Column('total_amount', sa.Integer(), nullable=False),
+    sa.Column('total_amount', sa.Float(), nullable=False),
     sa.Column('status', sa.String(length=50), nullable=False),
-    sa.Column('quantity', sa.Integer(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('quantity', sa.Integer(), nullable=False),
     sa.ForeignKeyConstraint(['buyer_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -45,6 +46,7 @@ def upgrade():
     sa.Column('stock', sa.Integer(), nullable=False),
     sa.Column('status', sa.String(length=50), nullable=False),
     sa.Column('seller_id', sa.Integer(), nullable=False),
+    sa.Column('image_url', sa.Text(length=300), nullable=True),
     sa.ForeignKeyConstraint(['seller_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -53,14 +55,14 @@ def upgrade():
     sa.Column('order_id', sa.Integer(), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('quantity', sa.Integer(), nullable=False),
-    sa.Column('price', sa.Integer(), nullable=False),
+    sa.Column('price', sa.Numeric(precision=10, scale=2), nullable=False),
     sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
     sa.ForeignKeyConstraint(['product_id'], ['products.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('reviews',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('product_id', sa.Integer(), nullable=False),
     sa.Column('rating', sa.Integer(), nullable=False),
     sa.Column('comment', sa.Text(), nullable=True),

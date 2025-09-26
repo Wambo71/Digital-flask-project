@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuth } from "../pages/Auth";
 
 function Profile() {
   const { user } = useAuth();
@@ -10,7 +11,7 @@ function Profile() {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5000/api/profile", {
+        const res = await fetch("http://localhost:5000/profile", {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -27,7 +28,9 @@ function Profile() {
   }, []);
 
   if (!user) {
-    return <p>Please log in to see your profile.</p>;
+    return (
+      <p>Please log in to see your profile.</p>
+    );
   }
 
   if (!profile) {

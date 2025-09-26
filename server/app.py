@@ -36,6 +36,17 @@ def logout():
     session.clear()
     return {"message": "Logged out successfully"}, 200
 
+@app.route("/profile", methods=["GET"])
+def profile():
+    user_id = session.get('user_id')
+    if not user_id:
+        return {"error": "Unauthorized"}, 401
+    
+    user = User.query.get(user_id)
+    if not user:
+        return {"error": "User not found"}, 404
+    
+    return user.to_dict(), 200
 
 class UsersResource(Resource):
     def get(self):
@@ -140,6 +151,8 @@ class ProductResource(Resource):
         db.session.delete(product)
         db.session.commit()
         return {"message": f"Product {product_id} deleted"}, 200
+    
+    
 
 
 
@@ -281,7 +294,7 @@ api.add_resource(OrderItemsResource, "/order_items/<int:order_id>")
 
 
 
-
+#
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)

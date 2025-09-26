@@ -1,38 +1,40 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import Register from "./pages/register";
-import Login from "./pages/login_page";
-import Profile from "./pages/profile";
-
-const PrivateRoute = ({ children }) => {
-  const token = localStorage.getItem("token");
-  return token ? children : <Navigate to="/login" />;
-};
+import { Routes, Route } from "react-router-dom";
+import Login from "./pages/LoginPage";
+import Profile from "./pages/Profile";
+import Products from "./pages/Products";
+import ProductDetails from "./pages/ProductDetails";
+import Home from "./pages/Home";
+import Cart from "./pages/Cart";
+import NavBar from "./components/NavBar";
+import Checkout from "./pages/Checkout";
+import Dashboard from "./pages/Dashboard";
+import ProtectedRoute from "./components/ProtectedRoutes";
 
 function App() {
   return (
-    <Router>
-      <div className="min-h-screen bg-gray-100">
-
-        <ToastContainer position="top-right" autoClose={3000} />
-
+    <div className="App">
+      <>
+        <NavBar />
         <Routes>
-          <Route path="/" element={<Navigate to="/login" />} />
+          <Route path="/navbar" element={<NavBar />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/products/:id" element={<ProductDetails />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route
             path="/profile"
             element={
-              <PrivateRoute>
+              <ProtectedRoute>
                 <Profile />
-              </PrivateRoute>
+              </ProtectedRoute>
             }
-          />
-
-          <Route path="/register" element={<Register />} />
+            />
         </Routes>
-      </div>
-    </Router>
+      </>
+        </div>
   );
 }
 

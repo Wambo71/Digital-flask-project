@@ -8,7 +8,7 @@ bcrypt = Bcrypt()
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ("-password_hash", "-orders", "-reviews", "-products")
+    serialize_rules = ("-password_hash", "-products.seller", "-orders.buyer", "-reviews.user")
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
@@ -49,7 +49,7 @@ class User(db.Model, SerializerMixin):
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
-    serialize_rules = ("-seller.password_hash", "-order_items", "-reviews", "-reviews.user.password_hash")
+    serialize_rules = ("-seller.password_hash", "-order_items.product", "-reviews.product")
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -77,7 +77,7 @@ class Product(db.Model, SerializerMixin):
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
-    serialize_rules = ("-buyer.password_hash", "-order_items")
+    serialize_rules = ("-buyer.password_hash", "-order_items.order", "-order_items.product.order_items", "-order_items.product.reviews")
 
     id = db.Column(db.Integer, primary_key=True)
     buyer_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
@@ -103,7 +103,7 @@ class Order(db.Model, SerializerMixin):
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
 
-    serialize_rules = ("-order.buyer.password_hash", "-product.seller.password_hash")
+    serialize_rules = ("-product.seller.password_hash", "-product.reviews", "-order.buyer.password_hash", "-product.order_items", "-order.order_items")
 
     id = db.Column(db.Integer, primary_key=True)
     order_id = db.Column(db.Integer, db.ForeignKey("orders.id"), nullable=False)
@@ -121,7 +121,7 @@ class OrderItem(db.Model, SerializerMixin):
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
 
-    serialize_rules = ("-user.password_hash", "-product.seller.password_hash")
+    serialize_rules = ("-user.password_hash", "-product.seller.password_hash", "-product.reviews", "-user.reviews", "-product.order_items")
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
@@ -139,4 +139,4 @@ class Review(db.Model, SerializerMixin):
     product = db.relationship("Product", back_populates="reviews")
 
     def __repr__(self):
-        return f"<Review {self.id} by {self.user.username}>"
+        return f"<Review {self.id} by {self.rating}>"
