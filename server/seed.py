@@ -61,7 +61,7 @@ with app.app_context():
         stock=100,
         status="available",
         seller_id=user1.id,
-        image_url = "maize.jpg"   
+        image_url="/static/images/maize.jpg"
         )
     product2 = Product(
         name="Cabbages",
@@ -69,7 +69,8 @@ with app.app_context():
         price="70.00 ksh",
         stock=150,
         status="available",
-        seller_id=user2.id
+        seller_id=user2.id,
+        image_url="/static/images/cabbage.jpg"
     )
     product3 = Product(
         name="Tomatoes",
@@ -77,7 +78,8 @@ with app.app_context():
         price="100.00 ksh",
         stock=200,
         status="reserved",
-        seller_id=user3.id
+        seller_id=user3.id,
+        image_url="/static/images/tomatoes.jpg"
     )
     product4 = Product(
         name="Potatoes",
@@ -85,7 +87,8 @@ with app.app_context():
         price="500.00 ksh",
         stock=250,
         status="sold out",
-        seller_id=user4.id
+        seller_id=user4.id,
+        image_url="/static/images/potatoes.jpg"
     )
     product5 = Product(
         name="Onions",
@@ -94,7 +97,7 @@ with app.app_context():
         stock=300,
         status="out of stock",
         seller_id=user5.id,
-        image_url= "onions.jpg"
+        image_url="/static/images/onions.jpg"
     )
     product6 = Product(
         name="Garlic",
@@ -103,7 +106,7 @@ with app.app_context():
         stock=350,
         status="reserved",
         seller_id=user1.id,
-        image_url = "garlic.jpg"
+        image_url="/static/images/garlic.jpg"
     )
     product7 = Product(
         name="Sweet Potatoes",
@@ -111,7 +114,8 @@ with app.app_context():
         price="80.00 ksh",
         stock=400,
         status="available",
-        seller_id=user2.id
+        seller_id=user2.id,
+        image_url="/static/images/potatoes.jpg"
     )
     product8 = Product(
         name="Cassava",
@@ -119,7 +123,8 @@ with app.app_context():
         price="90.00 ksh",
         stock=450,
         status="sold out",
-        seller_id=user3.id
+        seller_id=user3.id,
+        image_url="/static/images/cassava.jpg"
     )
     product9 = Product(
         name="Carrot",
@@ -128,7 +133,7 @@ with app.app_context():
         stock=500,
         status="out of stock",
         seller_id=user4.id,
-        image_url = "carrot.jpg"
+        image_url="/static/images/carrot.jpg"
     )
     product10 = Product(
         name="Cucumbers",
@@ -137,7 +142,7 @@ with app.app_context():
         stock=550,
         status="available",
         seller_id=user5.id,
-        image_url = "cucumbers.jpg"
+        image_url="/static/images/cucumber.jpg"
     )
     products.extend([product1, product2, product3, product4, product5, product6, product7, product8, product9, product10])
     for product in products:
