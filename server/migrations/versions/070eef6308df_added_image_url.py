@@ -1,8 +1,8 @@
-"""made reviews table
+"""added image url
 
-Revision ID: 7ee0b50bc30d
+Revision ID: 070eef6308df
 Revises: 
-Create Date: 2025-09-25 18:43:09.299617
+Create Date: 2025-09-28 18:16:01.436031
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '7ee0b50bc30d'
+revision = '070eef6308df'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -46,7 +46,7 @@ def upgrade():
     sa.Column('stock', sa.Integer(), nullable=False),
     sa.Column('status', sa.String(length=50), nullable=False),
     sa.Column('seller_id', sa.Integer(), nullable=False),
-    sa.Column('image_url', sa.Text(length=300), nullable=True),
+    sa.Column('image_url', sa.Text(length=300), nullable=False),
     sa.ForeignKeyConstraint(['seller_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
