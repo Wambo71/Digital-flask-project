@@ -8,7 +8,7 @@ function ProductDetails() {
   const [reviews, setReviews] = useState([]);
 
   useEffect(() => {
-    // Fetch product from backend API
+    
     fetch(`http://127.0.0.1:5500/products/${id}`)
       .then((res) => res.json())
       .then((data) => {

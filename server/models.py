@@ -53,17 +53,15 @@ class User(db.Model, SerializerMixin):
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
-<<<<<<< HEAD
+
     serialize_rules = (
         "-seller.password_hash",
         "-order_items.product",  
         "-reviews.product",      
         "-order_items.order",
     )
-=======
-    serialize_rules = ("-seller.password_hash", "-order_items", "-reviews", "-reviews.user.password_hash","-seller.products","-reviews.product",)
 
->>>>>>> 5114df998018bc804f1f499d53140ace6c5506d9
+
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
@@ -142,17 +140,12 @@ class Review(db.Model, SerializerMixin):
 
     serialize_rules = (
         "-user.password_hash",
-<<<<<<< HEAD
-        "-product.seller.password_hash",
-        "-product.reviews",
+        "-user.orders",
         "-user.reviews",
-        "-product.order_items",
-        "-product.order_items.order",
-=======
-        "-user.reviews",  
-        "-product.reviews",  
-        "-product.seller.products",  
->>>>>>> 5114df998018bc804f1f499d53140ace6c5506d9
+        "-product.reviews",
+        "-product.seller.products",
+        "-order_items.product",
+        "-order_items.order"
     )
 
     id = db.Column(db.Integer, primary_key=True)

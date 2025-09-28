@@ -10,7 +10,7 @@ function ProductCard({ product }) {
         style={{width:"100%", marginBottom: "10px"}}
       />
       <h3>{product.name}</h3>
-      <p>Price: ${product.price}</p>
+      <p>Price: {product.price}</p>
       <Link to={`/products/${product.id}`}>
         <button>View Details</button>
       </Link>

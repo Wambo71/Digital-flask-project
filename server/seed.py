@@ -61,7 +61,7 @@ with app.app_context():
         stock=100,
         status="available",
         seller_id=user1.id,
-        image_url="/static/images/maize.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/a637810c-7039-4274-b9b2-f34993a9427b/image.jpg"
         )
     product2 = Product(
         name="Cabbages",
@@ -70,7 +70,7 @@ with app.app_context():
         stock=150,
         status="available",
         seller_id=user2.id,
-        image_url="/static/images/cabbage.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/c2ceac27-279b-4a34-b4f8-17ab5a848101/image.jpg"
     )
     product3 = Product(
         name="Tomatoes",
@@ -79,7 +79,7 @@ with app.app_context():
         stock=200,
         status="reserved",
         seller_id=user3.id,
-        image_url="/static/images/tomatoes.jpg"
+        image_url="https://images.unsplash.com/photo-1742805286691-04a69edc3874?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     )
     product4 = Product(
         name="Potatoes",
@@ -88,7 +88,7 @@ with app.app_context():
         stock=250,
         status="sold out",
         seller_id=user4.id,
-        image_url="/static/images/potatoes.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/0319c633-39bd-46c5-8213-4fa6a8684293/image.jpg"
     )
     product5 = Product(
         name="Onions",
@@ -96,8 +96,7 @@ with app.app_context():
         price="20.00 ksh",
         stock=300,
         status="out of stock",
-        seller_id=user5.id,
-        image_url="/static/images/onions.jpg"
+        seller_id="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/8ff528f7-a317-4283-a21d-07b94aaa9a19/image.jpg"
     )
     product6 = Product(
         name="Garlic",
@@ -106,7 +105,7 @@ with app.app_context():
         stock=350,
         status="reserved",
         seller_id=user1.id,
-        image_url="/static/images/garlic.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/0042c037-7fd3-44ba-99ad-ea50d4e98bfb/image.jpg"
     )
     product7 = Product(
         name="Sweet Potatoes",
@@ -115,7 +114,7 @@ with app.app_context():
         stock=400,
         status="available",
         seller_id=user2.id,
-        image_url="/static/images/potatoes.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/b83763ef-37bf-47f9-9697-90ae7163fa05/image.jpg"
     )
     product8 = Product(
         name="Cassava",
@@ -124,7 +123,7 @@ with app.app_context():
         stock=450,
         status="sold out",
         seller_id=user3.id,
-        image_url="/static/images/cassava.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/3e894267-7876-412a-a39a-f6b86d6db812/image.jpg"
     )
     product9 = Product(
         name="Carrot",
@@ -133,7 +132,7 @@ with app.app_context():
         stock=500,
         status="out of stock",
         seller_id=user4.id,
-        image_url="/static/images/carrot.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/b23b1d98-3f9c-43c7-9303-74cd816efe6f/image.jpg"
     )
     product10 = Product(
         name="Cucumbers",
@@ -142,7 +141,7 @@ with app.app_context():
         stock=550,
         status="available",
         seller_id=user5.id,
-        image_url="/static/images/cucumber.jpg"
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/d7196f58-7667-41e8-b566-ba7082fdea65/image.jpg"
     )
     products.extend([product1, product2, product3, product4, product5, product6, product7, product8, product9, product10])
     for product in products:
