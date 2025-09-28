@@ -2,7 +2,7 @@ from flask import Flask, request, session
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from flask_bcrypt import bcrypt
+from flask_bcrypt import Bcrypt
 from extensions import db, migrate
 from config import Config
 from models import User, Product, Order, Review, OrderItem
@@ -13,8 +13,8 @@ app.config.from_object(Config)
 db.init_app(app)
 migrate.init_app(app, db)
 api = Api(app)
-bcrypt = bcrypt
-CORS(app)
+bcrypt = Bcrypt(app)
+CORS(app, supports_credentials=True)
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -25,7 +25,7 @@ def login():
         return {"error": "Email and password are required"}, 400
     
     user = User.query.filter_by(email=email).first()
-    if user and user.chack_password(password):
+    if user and user.check_password(password):
         session['user_id'] = user.id
         session['role'] = user.role
         return {"message": "Login successful", "user": user.to_dict()}, 200
@@ -212,7 +212,8 @@ class OrderItemsResource(Resource):
         db.session.commit()
         return order.to_dict(), 200
     
-    def delete(Self, order_id):
+
+    def delete(self, order_id):
         order = OrderItem.query.get(order_id)
         if not order:
             return {"error": "Order not found"}, 404
@@ -292,9 +293,6 @@ api.add_resource(ProductResource, "/products/<int:product_id>")
 api.add_resource(OrderItemResource, "/order_items")
 api.add_resource(OrderItemsResource, "/order_items/<int:order_id>")
 
-
-
-#
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)

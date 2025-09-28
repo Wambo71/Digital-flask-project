@@ -8,7 +8,12 @@ bcrypt = Bcrypt()
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
-    serialize_rules = ("-password_hash", "-products.seller", "-orders.buyer", "-reviews.user")
+    serialize_rules = (
+        "-password_hash",
+        "-products",  
+        "-orders",
+        "-reviews",
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), nullable=False, unique=True)
@@ -23,10 +28,9 @@ class User(db.Model, SerializerMixin):
     def set_password(self, password):
         self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
-    def check_password(Self, password):
-        return bcrypt.check_password_hash(Self.password_hash, password)
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password_hash, password)
 
-    
     @validates('email')
     def validate_email(self, key, email):
         if '@' not in email:
@@ -49,8 +53,12 @@ class User(db.Model, SerializerMixin):
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
-    serialize_rules = ("-seller.password_hash", "-order_items.product", "-reviews.product")
-
+    serialize_rules = (
+        "-seller.password_hash",
+        "-order_items.product",  
+        "-reviews.product",      
+        "-order_items.order",
+    )
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
     description = db.Column(db.Text)
@@ -77,7 +85,13 @@ class Product(db.Model, SerializerMixin):
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
-    serialize_rules = ("-buyer.password_hash", "-order_items.order", "-order_items.product.order_items", "-order_items.product.reviews")
+    serialize_rules = (
+        "-buyer.password_hash",
+        "-order_items.order",
+        "-order_items.product.order_items",
+        "-order_items.product.reviews",
+        "-buyer.orders"
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     buyer_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
@@ -121,7 +135,14 @@ class OrderItem(db.Model, SerializerMixin):
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
 
-    serialize_rules = ("-user.password_hash", "-product.seller.password_hash", "-product.reviews", "-user.reviews", "-product.order_items")
+    serialize_rules = (
+        "-user.password_hash",
+        "-product.seller.password_hash",
+        "-product.reviews",
+        "-user.reviews",
+        "-product.order_items",
+        "-product.order_items.order",
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)

@@ -13,7 +13,7 @@ function ProductDetails() {
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
-        setReviews(data.reviews || []); // initialize reviews
+        setReviews(data.reviews || []);
       })
       .catch((err) => console.error("Error fetching product:", err));
   }, [id]);
