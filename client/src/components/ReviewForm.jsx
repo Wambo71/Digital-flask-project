@@ -8,32 +8,30 @@ const ReviewSchema = Yup.object().shape({
 
 function ReviewForm({ onSubmit }) {
   return (
-    <div>
-      <h4>Leave a Review</h4>
+    <div className="container">
+      <h4 className="heading">Leave a Review</h4>
       <Formik
         initialValues={{ review: "" }}
         validationSchema={ReviewSchema}
         onSubmit={(values, { resetForm }) => {
           console.log("Review submitted:", values.review);
           if (onSubmit) onSubmit(values.review);
-          resetForm(); 
+          resetForm();
         }}
       >
         {({ errors, touched }) => (
-          <Form>
+          <Form className="form">
             <Field
               as="textarea"
               name="review"
               placeholder="Write your review..."
-              style={{ width: "100%", height: "80px" }} 
+              className={`textarea ${errors.review && touched.review ? "textareaError" : ""}`}
             />
+            {errors.review && touched.review && (
+              <div className="error">{errors.review}</div>
+            )}
 
-            {/* Validation error */}
-            {errors.review && touched.review ? (
-              <div style={{ color: "red" }}>{errors.review}</div>
-            ) : null}
-
-            <button type="submit" style={{ marginTop: "10px" }}>
+            <button type="submit" className="button">
               Submit
             </button>
           </Form>

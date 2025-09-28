@@ -15,7 +15,7 @@ function Login() {
   const handleSubmit = (values, { setSubmitting }) => {
     console.log("Login data:", values);
 
-    fetch("http://127.0.0.1:5500/api/users", {
+    fetch("http://127.0.0.1:5500/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(values),
@@ -26,7 +26,7 @@ function Login() {
         alert("Login successful (mock)");
 
         //  Redirect to dashboard
-        navigate("/dashboard");
+        navigate("/products");
       })
       .catch((err) => console.error(err))
       .finally(() => setSubmitting(false));
