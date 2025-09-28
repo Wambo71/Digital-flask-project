@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Login() {
   const navigate = useNavigate();
@@ -31,22 +32,22 @@ function Login() {
       .finally(() => setSubmitting(false));
   };
 
-  return (
-    <div>
-      <h2>Login</h2>
+  return ( 
+    <div className="checkout-container">
+      <h2 className="checkout-title">Login</h2>
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleSubmit}>
         {({ isSubmitting }) => (
-          <Form>
+          <Form className="checkout-form">
             <div>
-              <Field type="email" name="email" placeholder="Email" />
+              <Field type="email" name="email" placeholder="Email" className="form-input"/>
               <ErrorMessage name="email" component="div" style={{ color: "red" }} />
             </div>
             <div>
-              <Field type="password" name="password" placeholder="Password" />
+              <Field type="password" name="password" placeholder="Password" className="form-input"/>
               <ErrorMessage name="password" component="div" style={{ color: "red" }} />
             </div>
-            <button type="submit" disabled={isSubmitting}>
-              {isSubmitting ? "Logging in..." : "Login"}
+            <button type="submit" disabled={isSubmitting} className="submit-btn">
+              {isSubmitting ? toast.success("Unable to login") : "Login"}
             </button>
           </Form>
         )}

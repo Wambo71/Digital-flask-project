@@ -12,7 +12,7 @@ function Products() {
       .catch(err => console.error(err));
   }, []);
 
-  if (!products.length) return <p className="loading-text">Loading products...</p>;
+  if (!products.length) return <p className="loading-text">Loading products...Unable to load</p>;
 
   return (
     <div className="products-page">

@@ -7,7 +7,6 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import LoginPage from "./pages/LoginPage";
-import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Profile from "./pages/Profile";
 import "./App.css";
@@ -28,7 +27,6 @@ function App() {
         />
         <Route path="/cart" element={<Cart cart={cart} />} />
         <Route path="/checkout" element={<Checkout />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/profile"
           element={

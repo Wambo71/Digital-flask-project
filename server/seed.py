@@ -70,7 +70,7 @@ with app.app_context():
         stock=150,
         status="available",
         seller_id=user2.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/c2ceac27-279b-4a34-b4f8-17ab5a848101/image.jpg"
+        image_url="https://images.unsplash.com/photo-1594282486552-05b4d80fbb9f?q=80&w=985&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     )
     product3 = Product(
         name="Tomatoes",
@@ -97,7 +97,7 @@ with app.app_context():
         stock=300,
         status="out of stock",
         seller_id=user5.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/8ff528f7-a317-4283-a21d-07b94aaa9a19/image.jpg"
+        image_url="https://plus.unsplash.com/premium_photo-1668076517573-fa01307d87ad?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     )
     product6 = Product(
         name="Garlic",

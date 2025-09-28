@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Cart({ cart }) {
   return (
@@ -10,13 +11,14 @@ function Cart({ cart }) {
         <ul>
           {cart.map((item, index) => (
             <li key={index}>
-              {item.name} - ${item.price}
+              {item.name} - {item.price}
             </li>
           ))}
         </ul>
       )}
       <Link to="/checkout">
         <button className="button">Go Checkout</button>
+        {toast.success("Proceed to checkout")}
       </Link>
     </div>
   );
