@@ -1,16 +1,25 @@
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function Cart(){
-    return(
-        <div>
-            <h2>Your cart</h2>
-            <p>Items added will appear here</p>
-
-            <Link to="/checkout">
-              <button style={{ marginTop: "40px" }}>Go checkout</button>
-            </Link>
-        </div>
-    )
+function Cart({ cart }) {
+  return (
+    <div className="container">
+      <h2 className="heading">Your Cart</h2>
+      {cart.length === 0 ? (
+        <p>No items in cart</p>
+      ) : (
+        <ul>
+          {cart.map((item, index) => (
+            <li key={index}>
+              {item.name} - ${item.price}
+            </li>
+          ))}
+        </ul>
+      )}
+      <Link to="/checkout">
+        <button className="button">Go Checkout</button>
+      </Link>
+    </div>
+  );
 }
 
-export default Cart
+export default Cart;

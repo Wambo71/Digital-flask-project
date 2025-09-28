@@ -1,18 +1,13 @@
 import { Link } from "react-router-dom";
 
-
 function ProductCard({ product }) {
   return (
-    <div style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
-      <img
-        src={product.image_url}
-        alt={product.name}
-        style={{width:"100%", marginBottom: "10px"}}
-      />
-      <h3>{product.name}</h3>
-      <p>Price: {product.price}</p>
+    <div className="card">
+      <img src={product.image_url} alt={product.name} className="image" />
+      <h3 className="name">{product.name}</h3>
+      <p className="price">{product.price}</p>
       <Link to={`/products/${product.id}`}>
-        <button>View Details</button>
+        <button className="button">View Details</button>
       </Link>
     </div>
   );

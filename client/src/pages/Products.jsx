@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import ProductCard from "../components/ProductCard";
+import "../App.css";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -8,12 +9,15 @@ function Products() {
     fetch("http://127.0.0.1:5500/products")
       .then(res => res.json())
       .then(data => setProducts(data))
+      .catch(err => console.error(err));
   }, []);
 
+  if (!products.length) return <p className="loading-text">Loading products...</p>;
+
   return (
-    <div>
-      <h1>Products</h1>
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+    <div className="products-page">
+      <h1 className="products-title">Products</h1>
+      <div className="product-grid">
         {products.map(p => (
           <ProductCard key={p.id} product={p} />
         ))}

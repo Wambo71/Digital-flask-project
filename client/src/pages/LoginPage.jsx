@@ -25,8 +25,7 @@ function Login() {
         console.log("Response:", data);
         alert("Login successful (mock)");
 
-        //  Redirect to dashboard
-        navigate("/dashboard");
+        navigate("/products");
       })
       .catch((err) => console.error(err))
       .finally(() => setSubmitting(false));

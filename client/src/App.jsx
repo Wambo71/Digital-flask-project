@@ -1,6 +1,7 @@
-import { Routes, Route } from "react-router-dom";
-import Login from "./pages/LoginPage";
-import Profile from "./pages/Profile";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
+import NavBar from "./components/NavBar";
+import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
 import Home from "./pages/Home";
@@ -9,32 +10,36 @@ import NavBar from "./components/NavBar";
 import Checkout from "./pages/Checkout";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoutes";
+import Profile from "./pages/Profile";
+import "./App.css";
 
 function App() {
+  const [cart, setCart] = useState([]);
+
   return (
-    <div className="App">
-      <>
-        <NavBar />
-        <Routes>
-          <Route path="/navbar" element={<NavBar />} />
-          <Route path="/" element={<Home />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route
-            path="/profile"
-            element={
-              <ProtectedRoute>
-                <Profile />
-              </ProtectedRoute>
-            }
-            />
-        </Routes>
-      </>
-        </div>
+    <Router>
+      <NavBar cart={cart} />
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/products" element={<Products />} />
+        <Route
+          path="/products/:id"
+          element={<ProductDetails cart={cart} setCart={setCart} />}
+        />
+        <Route path="/cart" element={<Cart cart={cart} />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </Router>
   );
 }
 
