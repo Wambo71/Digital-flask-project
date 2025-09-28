@@ -5,7 +5,7 @@ function ProductCard({ product }) {
   return (
     <div style={{ border: "1px solid #ccc", margin: "10px", padding: "10px" }}>
       <img
-        src={`/images/${product.image}`}
+        src={product.image_url}
         alt={product.name}
         style={{width:"100%", marginBottom: "10px"}}
       />
