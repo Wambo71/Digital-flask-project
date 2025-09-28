@@ -108,14 +108,15 @@ class ProductsResource(Resource):
     def post(self):
         data = request.get_json()
         if not data.get("name") or not data.get("price") or not data.get("seller_id"):
-            return {"error": "name, price, and seller_id are required"}, 400
+            return {"error": "name, price, image_url and seller_id are required"}, 400
 
         new_product = Product(
             name=data["name"],
             description=data.get("description"),
             price=data["price"],
             seller_id=data["seller_id"],
-            stock=data.get("stock", 0)
+            stock=data.get("stock", 0),
+            image_url=data.get("image_url", "")
         )
         db.session.add(new_product)
         db.session.commit()
@@ -139,6 +140,7 @@ class ProductResource(Resource):
         product.description = data.get("description", product.description)
         product.price = data.get("price", product.price)
         product.stock = data.get("stock", product.stock)
+        product.image_url = data.get("image_url", product.image_url)
 
         db.session.commit()
         return product.to_dict(), 200

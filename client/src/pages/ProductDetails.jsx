@@ -21,7 +21,7 @@ function ProductDetails({ cart, setCart }) {
       <h2 className="heading">{product.name}</h2>
       <img src={product.image_url} alt={product.name} className="image" />
       <p>{product.description}</p>
-      <p className="price">${product.price}</p>
+      <p className="price">{product.price}</p>
       <button className="button" onClick={addToCart}>
         Add to Cart
       </button>

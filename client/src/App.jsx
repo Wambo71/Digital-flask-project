@@ -4,10 +4,9 @@ import NavBar from "./components/NavBar";
 import Home from "./pages/Home";
 import Products from "./pages/Products";
 import ProductDetails from "./pages/ProductDetails";
-import Home from "./pages/Home";
 import Cart from "./pages/Cart";
-import NavBar from "./components/NavBar";
 import Checkout from "./pages/Checkout";
+import LoginPage from "./pages/LoginPage";
 import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoutes";
 import Profile from "./pages/Profile";
@@ -21,7 +20,7 @@ function App() {
       <NavBar cart={cart} />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/products" element={<Products />} />
         <Route
           path="/products/:id"

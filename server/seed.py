@@ -57,7 +57,7 @@ with app.app_context():
     product1 = Product(
         name="Maize",
         description="Fresh and organic maize",
-        price="50.00 ksh",
+        price="30.00 ksh per maize",
         stock=100,
         status="available",
         seller_id=user1.id,
@@ -66,7 +66,7 @@ with app.app_context():
     product2 = Product(
         name="Cabbages",
         description="Crisp and crunchy cabbages",
-        price="70.00 ksh",
+        price="70.00 ksh per cabbage",
         stock=150,
         status="available",
         seller_id=user2.id,
@@ -75,7 +75,7 @@ with app.app_context():
     product3 = Product(
         name="Tomatoes",
         description="Juicy and ripe tomatoes",
-        price="100.00 ksh",
+        price="10 ksh per tomato",
         stock=200,
         status="reserved",
         seller_id=user3.id,
@@ -84,7 +84,7 @@ with app.app_context():
     product4 = Product(
         name="Potatoes",
         description="Earthy and flavorful potatoes",
-        price="500.00 ksh",
+        price="500.00 ksh per bucket",
         stock=250,
         status="sold out",
         seller_id=user4.id,
@@ -93,15 +93,16 @@ with app.app_context():
     product5 = Product(
         name="Onions",
         description="Sharp and zesty onions",
-        price="20.00 ksh",
+        price="15.00 ksh per onion",
         stock=300,
         status="out of stock",
-        seller_id="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/8ff528f7-a317-4283-a21d-07b94aaa9a19/image.jpg"
+        seller_id=user5.id,
+        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/8ff528f7-a317-4283-a21d-07b94aaa9a19/image.jpg"
     )
     product6 = Product(
         name="Garlic",
         description="Pungent and aromatic garlic",
-        price="70.00 ksh",
+        price="70.00 ksh per kilogram",
         stock=350,
         status="reserved",
         seller_id=user1.id,
@@ -110,7 +111,7 @@ with app.app_context():
     product7 = Product(
         name="Sweet Potatoes",
         description="Sweet and starchy sweet potatoes",
-        price="80.00 ksh",
+        price="300.00 ksh per minibucket",
         stock=400,
         status="available",
         seller_id=user2.id,
@@ -119,7 +120,7 @@ with app.app_context():
     product8 = Product(
         name="Cassava",
         description="Nutty and versatile cassava",
-        price="90.00 ksh",
+        price="90.00 ksh per cassava",
         stock=450,
         status="sold out",
         seller_id=user3.id,
@@ -128,7 +129,7 @@ with app.app_context():
     product9 = Product(
         name="Carrot",
         description="Crunchy and sweet carrots",
-        price="100.00 ksh",
+        price="100.00 ksh per kilogram",
         stock=500,
         status="out of stock",
         seller_id=user4.id,
@@ -137,7 +138,7 @@ with app.app_context():
     product10 = Product(
         name="Cucumbers",
         description="Cool and refreshing cucumbers",
-        price="25.00 ksh",
+        price="25.00 ksh per cucumber",
         stock=550,
         status="available",
         seller_id=user5.id,
