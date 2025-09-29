@@ -2,7 +2,7 @@ function Dashboard(){
     return(
         <div>
             <h2>Welcome to Dashboard</h2>
-            <p>You are logged in successful!!!</p>
+            <p>Thank you for shopping with us!!!</p>
         </div>
     )
 }
