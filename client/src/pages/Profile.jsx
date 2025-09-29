@@ -11,7 +11,8 @@ function Profile() {
     const fetchProfile = async () => {
       try {
         const token = localStorage.getItem("token");
-        const res = await fetch("http://localhost:5500/profile", {
+        const res = await fetch("http://localhost:5000/profile", {
+          credentials: "include",
           headers: { Authorization: `Bearer ${token}` },
         });
 

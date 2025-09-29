@@ -8,7 +8,7 @@ function ProductDetails({ cart, setCart }) {
   const [product, setProduct] = useState(null);
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:5500/products/${id}`)
+    fetch(`http://127.0.0.1:5000/products/${id}`)
       .then(res => res.json())
       .then(data => setProduct(data))
       .catch(err => console.error(err));
