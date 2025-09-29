@@ -22,7 +22,11 @@ function ProductDetails({ cart, setCart }) {
   };
 
   const addreviews = () => {
-    <ReviewForm />
+    setProduct({...product, showReviewForm: true});
+  };
+
+  if (product.showReviewForm) {
+    return <ReviewForm productId={product.id} onClose={() => setProduct({...product, showReviewForm: false})} />;
   }
 
   return (

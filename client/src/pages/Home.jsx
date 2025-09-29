@@ -35,7 +35,7 @@ function Home() {
         ))}
       </div>
       {visibleCount < products.length && (
-        <button className="load-more-button" onClick={handleViewMore}>
+        <button className="button" onClick={handleViewMore}>
           View More
         </button>
       )}

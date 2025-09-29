@@ -238,3 +238,31 @@
   font-size: 18px;
   color: #555;
 }
+
+.toastify-container {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.toastify-toast {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.toastify-toast--default {
+  background: #4caf50;
+  color: white;
+}
+.toastify-toast--error {
+  background: #f44336;
+  color: white;
+}
+.toastify-toast--info {
+  background: #2196f3;
+  color: white;
+}
+.toastify-toast--warning {
+  background: #ff9800;
+  color: white;
+}
+.toastify.success {
+  background-color: #4caf50;
+  color: white;
+}
