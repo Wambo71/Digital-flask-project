@@ -11,6 +11,8 @@ from models import User, Product, Order, OrderItem, Review
 
 
 app = Flask(__name__)
+static_foler = "..client/dist/src"
+template_folder = "..client/dist"
 app.config.from_object(Config)
 app.secret_key = "supersecretkey"  
 
