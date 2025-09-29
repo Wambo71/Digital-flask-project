@@ -12,17 +12,15 @@ from models import User, Product, Order, OrderItem, Review
 
 app = Flask(__name__)
 app.config.from_object(Config)
-app.secret_key = "supersecretkey"  # Needed for session management
+app.secret_key = "supersecretkey"  
 
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
 bcrypt = Bcrypt(app)
 
-# Allow frontend to communicate with cookies
 CORS(app, supports_credentials=True)
 
-#Routes
 @app.route('/signup', methods=['POST'])
 def signup():
     data = request.get_json()
@@ -31,30 +29,26 @@ def signup():
     password = data.get("password")
     role = data.get("role", "buyer")
 
-    # Validate required fields
     if not username or not email or not password:
         return {"error": "Username, email, and password are required"}, 400
 
-    # Check for duplicate email or username
     if User.query.filter_by(email=email).first():
         return {"error": "Email already exists"}, 400
     if User.query.filter_by(username=username).first():
         return {"error": "Username already exists"}, 400
 
-    # Create user
     new_user = User(
         username=username,
         email=email,
         role=role
     )
-    new_user.set_password(password)  # hashes password with bcrypt
+    new_user.set_password(password)  
 
     db.session.add(new_user)
     db.session.commit()
 
     return {"message": "User created successfully", "user": new_user.to_dict()}, 201
 
-# Login
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -72,13 +66,11 @@ def login():
 
     return {"error": "Invalid email or password"}, 401
 
-# Logout
 @app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
     return {"message": "Logged out successfully"}, 200
 
-#users
 class UsersResource(Resource):
     def get(self):
         users = User.query.all()

@@ -9,7 +9,7 @@ function ProductDetails({ cart, setCart }) {
 
   //  Fetch product details
   useEffect(() => {
-    fetch("https://digital-flask-project-4.onrender.com")
+    fetch(`https://digital-flask-project-4.onrender.com/products/${id}`)
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error(err));
@@ -17,7 +17,7 @@ function ProductDetails({ cart, setCart }) {
 
   //  Fetch reviews for the product
   useEffect(() => {
-    fetch(`http://127.0.0.1:5500/reviews?productId=${id}`)
+    fetch(`https://digital-flask-project-4.onrender.com/reviews?productId=${id}`)
       .then((res) => res.json())
       .then((data) => setReviews(data))
       .catch((err) => console.error(err));

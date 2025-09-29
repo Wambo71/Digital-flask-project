@@ -6,7 +6,7 @@ function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("https://digital-flask-project-4.onrender.com")
+    fetch("https://digital-flask-project-4.onrender.com/products")
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));

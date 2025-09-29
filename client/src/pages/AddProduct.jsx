@@ -33,7 +33,7 @@ function AddProduct() {
       // Add seller_id from logged-in user
       const payload = { ...values, seller_id: user.id };
 
-      const res = await fetch("http://127.0.0.1:5500/products", {
+      const res = await fetch("https://digital-flask-project-4.onrender.com/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
