@@ -238,3 +238,377 @@
   font-size: 18px;
   color: #555;
 }
+
+/* ---------------- Reviews Section ---------------- */
+.reviews {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+}
+
+.reviews h3 {
+  margin-bottom: 10px;
+  color: #2e7d32;
+  font-size: 18px;
+}
+
+.reviews ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.reviews li {
+  background: #fff;
+  padding: 8px;
+  border-radius: 5px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* ---------------- Review Form ---------------- */
+.review-form {
+  margin-top: 20px;
+}
+
+.review-form h4 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.review-form textarea {
+  width: 100%;
+  height: 80px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  margin-bottom: 10px;
+  resize: vertical;
+  font-family: inherit;
+}
+
+.review-form button {
+  background-color: #2e7d32;
+  color: #fff;
+  padding: 8px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.review-form button:hover {
+  background-color: #256528;
+}
+
+/* ---------------- Login Page ---------------- */
+.login-container {
+  max-width: 400px;
+  margin: 80px auto;
+  padding: 25px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.login-form .form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-form label {
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #333;
+}
+
+.login-form .form-input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.login-form .form-input:focus {
+  border-color: #2e7d32;
+  outline: none;
+}
+
+.login-form .error-text {
+  color: red;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.login-btn {
+  background-color: #2e7d32;
+  color: white;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s;
+}
+
+.login-btn:hover {
+  background-color: #256528;
+  transform: scale(1.02);
+}
+
+.login-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Signup Form Container */
+.signup-form-container {
+  max-width: 400px;
+  margin: 50px auto;
+  padding: 30px 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Form Heading */
+.signup-form-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+}
+
+/* Form Fields */
+.signup-form-container .form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.signup-form-container input,
+.signup-form-container select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.signup-form-container input:focus,
+.signup-form-container select:focus {
+  border-color: #4CAF50;
+}
+
+/* Error Messages */
+.signup-form-container .error-text {
+  color: #d8000c;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Submit Button */
+.signup-form-container button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.signup-form-container button:hover {
+  background-color: #45a049;
+}
+
+.signup-form-container button:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Status Message */
+.signup-form-container .status-text {
+  margin-top: 10px;
+  color: #d8000c;
+  text-align: center;
+  font-size: 14px;
+}
+/* Container */
+.add-product-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px 25px;
+  background-color: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Form title */
+.add-product-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 24px;
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs */
+.form-input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: #4CAF50;
+}
+
+/* Error messages */
+.error-text {
+  color: #d8000c;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.submit-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Status message */
+.add-product-form .status-text {
+  margin-top: 10px;
+  text-align: center;
+  color: #d8000c;
+  font-size: 14px;
+}
+/* Container */
+.add-product-container {
+  max-width: 500px;
+  margin: 50px auto;
+  padding: 30px 25px;
+  background-color: #fefefe;
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Form title */
+.add-product-container h2 {
+  text-align: center;
+  margin-bottom: 25px;
+  color: #333;
+  font-size: 24px;
+}
+
+/* Form group */
+.form-group {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Inputs */
+.form-input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus {
+  border-color: #4CAF50;
+}
+
+/* Error messages */
+.error-text {
+  color: #d8000c;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* Submit button */
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  margin-top: 10px;
+  background-color: #4CAF50;
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.submit-btn:hover {
+  background-color: #45a049;
+}
+
+.submit-btn:disabled {
+  background-color: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Status message */
+.add-product-form .status-text {
+  margin-top: 10px;
+  text-align: center;
+  color: #d8000c;
+  font-size: 14px;
+}

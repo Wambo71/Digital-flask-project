@@ -7,7 +7,7 @@ function Home() {
     <div>
       <h1>Welcome to My Shop</h1>
       <p>Your one stop place for shopping online!!!</p>
-      <button onClick={() => navigate("/products")}>Go to Products</button>
+      <button onClick={() => navigate("/signup")}>Go to SignUp</button>
     </div>
   );
 }

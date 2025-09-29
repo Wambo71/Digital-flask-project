@@ -1,63 +1,103 @@
-from flask import Flask, request, session
+#!/usr/bin/env python3
+from flask import Flask, request, session, jsonify
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
-from flask_bcrypt import bcrypt
-from extensions import db, migrate
+from flask_bcrypt import Bcrypt
+
+from extensions import db
 from config import Config
-from models import User, Product, Order, Review, OrderItem
+from models import User, Product, Order, OrderItem, Review
+
 
 app = Flask(__name__)
 app.config.from_object(Config)
+app.secret_key = "supersecretkey"  # Needed for session management
 
 db.init_app(app)
-migrate.init_app(app, db)
+migrate = Migrate(app, db)
 api = Api(app)
-bcrypt = bcrypt
-CORS(app)
+bcrypt = Bcrypt(app)
 
-@app.route("/login", methods=["POST"])
-def login():
+# Allow frontend to communicate with cookies
+CORS(app, supports_credentials=True)
+
+#Routes
+@app.route('/signup', methods=['POST'])
+def signup():
     data = request.get_json()
+    username = data.get("username")
     email = data.get("email")
     password = data.get("password")
+    role = data.get("role", "buyer")
+
+    # Validate required fields
+    if not username or not email or not password:
+        return {"error": "Username, email, and password are required"}, 400
+
+    # Check for duplicate email or username
+    if User.query.filter_by(email=email).first():
+        return {"error": "Email already exists"}, 400
+    if User.query.filter_by(username=username).first():
+        return {"error": "Username already exists"}, 400
+
+    # Create user
+    new_user = User(
+        username=username,
+        email=email,
+        role=role
+    )
+    new_user.set_password(password)  # hashes password with bcrypt
+
+    db.session.add(new_user)
+    db.session.commit()
+
+    return {"message": "User created successfully", "user": new_user.to_dict()}, 201
+
+# Login
+@app.route('/login', methods=['POST'])
+def login():
+    data = request.get_json()
+    email = data.get('email')
+    password = data.get('password')
+
     if not email or not password:
         return {"error": "Email and password are required"}, 400
-    
+
     user = User.query.filter_by(email=email).first()
-    if user and user.chack_password(password):
+    if user and bcrypt.check_password_hash(user.password_hash, password):
         session['user_id'] = user.id
-        session['role'] = user.role
+        session['role'] = getattr(user, "role", "buyer")
         return {"message": "Login successful", "user": user.to_dict()}, 200
+
     return {"error": "Invalid email or password"}, 401
 
-@app.route("/logout", methods=["POST"])
+# Logout
+@app.route('/logout', methods=['POST'])
 def logout():
     session.clear()
     return {"message": "Logged out successfully"}, 200
 
-
+#users
 class UsersResource(Resource):
     def get(self):
         users = User.query.all()
         return [user.to_dict() for user in users], 200
-    
+
     def post(self):
         data = request.get_json()
+        username = data.get("username")
+        email = data.get("email")
+        password = data.get("password")
 
-        if not data.get("username") or not data.get("email") or not data.get("password_hash"):
-            return {"error": "username, email and password_hash are required"}, 400
+        if not username or not email or not password:
+            return {"error": "username, email, and password are required"}, 400
 
-        new_user = User(
-            username=data["username"],
-            email=data["email"],
-            password_hash=data["password_hash"],
-            role=data.get("role", "buyer")
-        )
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+        new_user = User(username=username, email=email, password_hash=hashed_password, role=data.get("role", "buyer"))
         db.session.add(new_user)
         db.session.commit()
-        return new_user.to_dict(), 201 
-
+        return new_user.to_dict(), 201
 
 class UserResource(Resource):
     def get(self, user_id):
@@ -65,7 +105,7 @@ class UserResource(Resource):
         if not user:
             return {"error": "User not found"}, 404
         return user.to_dict(), 200
-    
+
     def put(self, user_id):
         user = User.query.get(user_id)
         if not user:
@@ -74,11 +114,12 @@ class UserResource(Resource):
         data = request.get_json()
         user.username = data.get("username", user.username)
         user.email = data.get("email", user.email)
-        user.password_hash = data.get("password_hash", user.password_hash)
+        if "password" in data:
+            user.password_hash = bcrypt.generate_password_hash(data["password"]).decode('utf-8')
 
         db.session.commit()
         return user.to_dict(), 200
-    
+
     def delete(self, user_id):
         user = User.query.get(user_id)
         if not user:
@@ -88,28 +129,31 @@ class UserResource(Resource):
         db.session.commit()
         return {"message": f"User {user_id} deleted"}, 200
 
-
+# products
 class ProductsResource(Resource):
     def get(self):
         products = Product.query.all()
         return [product.to_dict() for product in products], 200
-    
+
     def post(self):
         data = request.get_json()
-        if not data.get("name") or not data.get("price") or not data.get("seller_id"):
+        name = data.get("name")
+        price = data.get("price")
+        seller_id = data.get("seller_id")
+
+        if not name or not price or not seller_id:
             return {"error": "name, price, and seller_id are required"}, 400
 
         new_product = Product(
-            name=data["name"],
+            name=name,
             description=data.get("description"),
-            price=data["price"],
-            seller_id=data["seller_id"],
+            price=price,
+            seller_id=seller_id,
             stock=data.get("stock", 0)
         )
         db.session.add(new_product)
         db.session.commit()
         return new_product.to_dict(), 201
-
 
 class ProductResource(Resource):
     def get(self, product_id):
@@ -117,7 +161,7 @@ class ProductResource(Resource):
         if not product:
             return {"error": "Product not found"}, 404
         return product.to_dict(), 200
-    
+
     def put(self, product_id):
         product = Product.query.get(product_id)
         if not product:
@@ -131,7 +175,7 @@ class ProductResource(Resource):
 
         db.session.commit()
         return product.to_dict(), 200
-    
+
     def delete(self, product_id):
         product = Product.query.get(product_id)
         if not product:
@@ -140,16 +184,33 @@ class ProductResource(Resource):
         db.session.delete(product)
         db.session.commit()
         return {"message": f"Product {product_id} deleted"}, 200
-    
-    
 
-
-
+#oders
 class OrdersResource(Resource):
     def get(self):
         orders = Order.query.all()
         return [order.to_dict() for order in orders], 200
-    
+
+    def post(self):
+        data = request.get_json()
+        user_id = data.get("user_id")
+        product_id = data.get("product_id")
+        quantity = data.get("quantity", 1)
+        total_amount = data.get("total_amount", 0)
+
+        if not user_id or not product_id:
+            return {"error": "user_id and product_id are required"}, 400
+
+        new_order = Order(
+            user_id=user_id,
+            product_id=product_id,
+            quantity=quantity,
+            total_amount=total_amount,
+            status=data.get("status", "pending")
+        )
+        db.session.add(new_order)
+        db.session.commit()
+        return new_order.to_dict(), 201
 
 class OrderResource(Resource):
     def get(self, order_id):
@@ -157,7 +218,19 @@ class OrderResource(Resource):
         if not order:
             return {"error": "Order not found"}, 404
         return order.to_dict(), 200
-      
+
+    def put(self, order_id):
+        order = Order.query.get(order_id)
+        if not order:
+            return {"error": "Order not found"}, 404
+
+        data = request.get_json()
+        order.status = data.get("status", order.status)
+        order.quantity = data.get("quantity", order.quantity)
+        order.total_amount = data.get("total_amount", order.total_amount)
+        db.session.commit()
+        return order.to_dict(), 200
+
     def delete(self, order_id):
         order = Order.query.get(order_id)
         if not order:
@@ -166,80 +239,93 @@ class OrderResource(Resource):
         db.session.delete(order)
         db.session.commit()
         return {"message": f"Order {order_id} deleted"}, 200
-      
-    def put(self, order_id):
-        order = Order.query.get(order_id)
-        if not order:
-            return {"error": "Order not found"}, 404
-        data = request.get_json()
-        order.status = data.get("status", order.status)
-        order.quantity = data.get("quantity", order.quantity)
-        order.total_amount = data.get("total_amount", order.total_amount)
-        db.session.commit()
-        return order.to_dict(), 200
-    
-class OrderItemResource(Resource):
-    def get(self):
-        orders = OrderItem.query.all()
-        return [order.to_dict() for order in orders], 200
-    
+#order items
 class OrderItemsResource(Resource):
-    def get(self, order_id):
-        order = OrderItem.query.get(order_id)
-        if not order:
-            return {"error": "Order not found"}, 404
-        return order.to_dict(), 200
-    
-    def post(self, order_id):
-        order = OrderItem.query.get(order_id)
-        if not order:
-            return {"error": "Order not found"}, 404
+    def get(self):
+        items = OrderItem.query.all()
+        return [item.to_dict() for item in items], 200
+
+    def post(self):
         data = request.get_json()
-        order.status = data.get("status", order.status)
-        order.quantity = data.get("quantity", order.quantity)
-        order.total_amount = data.get("total_amount", order.total_amount)
+        order_id = data.get("order_id")
+        product_id = data.get("product_id")
+        quantity = data.get("quantity", 1)
+        total_amount = data.get("total_amount", 0)
+
+        if not order_id or not product_id:
+            return {"error": "order_id and product_id are required"}, 400
+
+        new_item = OrderItem(
+            order_id=order_id,
+            product_id=product_id,
+            quantity=quantity,
+            total_amount=total_amount,
+            status=data.get("status", "pending")
+        )
+        db.session.add(new_item)
         db.session.commit()
-        return order.to_dict(), 200
-    
-    def delete(Self, order_id):
-        order = OrderItem.query.get(order_id)
-        if not order:
-            return {"error": "Order not found"}, 404
+        return new_item.to_dict(), 201
 
-        db.session.delete(order)
+class OrderItemResource(Resource):
+    def get(self, item_id):
+        item = OrderItem.query.get(item_id)
+        if not item:
+            return {"error": "Order item not found"}, 404
+        return item.to_dict(), 200
+
+    def put(self, item_id):
+        item = OrderItem.query.get(item_id)
+        if not item:
+            return {"error": "Order item not found"}, 404
+
+        data = request.get_json()
+        item.status = data.get("status", item.status)
+        item.quantity = data.get("quantity", item.quantity)
+        item.total_amount = data.get("total_amount", item.total_amount)
         db.session.commit()
-        return {"message": f"Order {order_id} deleted"}, 200
+        return item.to_dict(), 200
 
+    def delete(self, item_id):
+        item = OrderItem.query.get(item_id)
+        if not item:
+            return {"error": "Order item not found"}, 404
 
+        db.session.delete(item)
+        db.session.commit()
+        return {"message": f"Order item {item_id} deleted"}, 200
 
+#reviews
 class ReviewsResource(Resource):
     def get(self):
         reviews = Review.query.all()
         return [review.to_dict() for review in reviews], 200
-    
+
     def post(self):
         data = request.get_json()
+        user_id = data.get("user_id")
+        product_id = data.get("product_id")
+        rating = data.get("rating")
 
-        if not data.get("user_id") or not data.get("product_id") or not data.get("rating"):
+        if not user_id or not product_id or not rating:
             return {"error": "user_id, product_id, and rating are required"}, 400
 
-        user = User.query.get(data["user_id"])
-        product = Product.query.get(data["product_id"])
+        user = User.query.get(user_id)
+        product = Product.query.get(product_id)
+
         if not user:
-            return {"error": f"User {data['user_id']} not found"}, 404
+            return {"error": f"User {user_id} not found"}, 404
         if not product:
-            return {"error": f"Product {data['product_id']} not found"}, 404
+            return {"error": f"Product {product_id} not found"}, 404
 
         new_review = Review(
-            user_id=data["user_id"],
-            product_id=data["product_id"],
-            rating=data["rating"],
+            user_id=user_id,
+            product_id=product_id,
+            rating=rating,
             comment=data.get("comment", "")
         )
         db.session.add(new_review)
         db.session.commit()
         return new_review.to_dict(), 201
-
 
 class ReviewResource(Resource):
     def get(self, review_id):
@@ -247,7 +333,7 @@ class ReviewResource(Resource):
         if not review:
             return {"error": "Review not found"}, 404
         return review.to_dict(), 200
-    
+
     def put(self, review_id):
         review = Review.query.get(review_id)
         if not review:
@@ -256,10 +342,9 @@ class ReviewResource(Resource):
         data = request.get_json()
         review.rating = data.get("rating", review.rating)
         review.comment = data.get("comment", review.comment)
-
         db.session.commit()
         return review.to_dict(), 200
-    
+
     def delete(self, review_id):
         review = Review.query.get(review_id)
         if not review:
@@ -269,21 +354,16 @@ class ReviewResource(Resource):
         db.session.commit()
         return {"message": f"Review {review_id} deleted"}, 200
 
-
-api.add_resource(ReviewsResource, "/reviews")
-api.add_resource(ReviewResource, "/reviews/<int:review_id>")
 api.add_resource(UsersResource, "/users")
 api.add_resource(UserResource, "/users/<int:user_id>")
-api.add_resource(OrdersResource, "/orders")
-api.add_resource(OrderResource, "/orders/<int:order_id>") 
 api.add_resource(ProductsResource, "/products")
 api.add_resource(ProductResource, "/products/<int:product_id>")
-api.add_resource(OrderItemResource, "/order_items")
-api.add_resource(OrderItemsResource, "/order_items/<int:order_id>")
-
-
-
-#
+api.add_resource(OrdersResource, "/orders")
+api.add_resource(OrderResource, "/orders/<int:order_id>")
+api.add_resource(OrderItemsResource, "/order_items")
+api.add_resource(OrderItemResource, "/order_items/<int:item_id>")
+api.add_resource(ReviewsResource, "/reviews")
+api.add_resource(ReviewResource, "/reviews/<int:review_id>")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)

@@ -1,15 +1,22 @@
+// components/ProtectedRoute.jsx
 import { Navigate } from "react-router-dom";
 
-function ProtectedRoute({ children }) {
-  // Check if user exists 
-  const user = localStorage.getItem("user");
+function ProtectedRoute({ children, sellerOnly = false }) {
+  const userString = localStorage.getItem("user");
+  const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
+  const user = userString ? JSON.parse(userString) : null;
 
-  // If not logged in then redirect to login
-  if (!user) {
-    return <Navigate to="/login" />;
+  // Not logged in or user missing
+  if (!isLoggedIn || !user) {
+    return <Navigate to="/login" replace />;
   }
 
-  // If logged in then show the page
+  // Seller-only page
+  if (sellerOnly && user.role !== "seller") {
+    alert("Only sellers can access this page");
+    return <Navigate to="/" replace />;
+  }
+
   return children;
 }
 
