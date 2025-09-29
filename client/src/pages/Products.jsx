@@ -6,7 +6,7 @@ function Products() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:5500/products")
+    fetch("https://digital-flask-project-4.onrender.com")
       .then(res => res.json())
       .then(data => setProducts(data))
       .catch(err => console.error(err));

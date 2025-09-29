@@ -9,7 +9,7 @@ function ProductDetails({ cart, setCart }) {
 
   //  Fetch product details
   useEffect(() => {
-    fetch(`http://127.0.0.1:5500/products/${id}`)
+    fetch("https://digital-flask-project-4.onrender.com")
       .then((res) => res.json())
       .then((data) => setProduct(data))
       .catch((err) => console.error(err));
