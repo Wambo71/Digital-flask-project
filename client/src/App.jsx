@@ -1,3 +1,4 @@
+// App.jsx
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import NavBar from "./components/NavBar";
@@ -7,9 +8,11 @@ import ProductDetails from "./pages/ProductDetails";
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/LoginPage";
+import SignUp from "./pages/SignUp";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoutes";
 import Profile from "./pages/Profile";
+import AddProduct from "./pages/AddProduct";
+import ProtectedRoute from "./components/ProtectedRoutes";
 import "./App.css";
 
 function App() {
@@ -18,17 +21,30 @@ function App() {
   return (
     <Router>
       <NavBar cart={cart} />
+
       <Routes>
+        {/* Public routes */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/products" element={<Products />} />
+        <Route path="/signup" element={<SignUp />} />
+
+        {/* Protected routes */}
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Products />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/products/:id"
-          element={<ProductDetails cart={cart} setCart={setCart} />}
+          element={
+            <ProtectedRoute>
+              <ProductDetails cart={cart} setCart={setCart} />
+            </ProtectedRoute>
+          }
         />
-        <Route path="/cart" element={<Cart cart={cart} />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route
           path="/profile"
           element={
@@ -37,6 +53,28 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Only sellers can add products */}
+        <Route
+          path="/add-product"
+          element={
+            <ProtectedRoute sellerOnly={true}>
+              <AddProduct />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Cart and checkout */}
+        <Route path="/cart" element={<Cart cart={cart} />} />
+        <Route path="/checkout" element={<Checkout />} />
       </Routes>
     </Router>
   );

@@ -1,10 +1,8 @@
-from extensions import db
+from extensions import db, bcrypt
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.orm import validates
-from flask_bcrypt import Bcrypt
 
-bcrypt = Bcrypt()
-
+# ------------------ USER MODEL ------------------
 class User(db.Model, SerializerMixin):
     __tablename__ = "users"
 
@@ -16,40 +14,55 @@ class User(db.Model, SerializerMixin):
     password_hash = db.Column(db.String(200), nullable=False)
     role = db.Column(db.String(50), nullable=False, default="buyer")
 
+    # Relationships
     products = db.relationship("Product", back_populates="seller", cascade="all, delete-orphan")
     orders = db.relationship("Order", back_populates="buyer", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="user", cascade="all, delete-orphan")
 
+    # Password methods
     def set_password(self, password):
+        """Hash and set the user's password."""
         self.password_hash = bcrypt.generate_password_hash(password).decode("utf-8")
 
-    def check_password(Self, password):
-        return bcrypt.check_password_hash(Self.password_hash, password)
+    def check_password(self, password):
+        """Verify the user's password."""
+        return bcrypt.check_password_hash(self.password_hash, password)
 
-    
-    @validates('email')
+    # Validators
+    @validates("email")
     def validate_email(self, key, email):
         if '@' not in email:
             raise ValueError("Invalid email format")
         return email
-    @validates('role')
+
+    @validates("role")
     def validate_role(self, key, role):
         if role not in ['buyer', 'seller']:
             raise ValueError("Role must either be buyer or seller")
         return role
+
     @validates("username")
     def validate_username(self, key, username):
-        if not len(username) > 3:
-            raise ValueError("Username must be more than 3 characters")
+        if len(username) < 4:
+            raise ValueError("Username must be at least 4 characters")
         return username
 
     def __repr__(self):
         return f"<User {self.username}>"
 
+
+# ------------------ PRODUCT MODEL ------------------
 class Product(db.Model, SerializerMixin):
     __tablename__ = "products"
 
-    serialize_rules = ("-seller.password_hash", "-order_items", "-reviews", "-reviews.user.password_hash","-seller.products","-reviews.product",)
+    serialize_rules = (
+        "-seller.password_hash",
+        "-order_items",
+        "-reviews",
+        "-reviews.user.password_hash",
+        "-seller.products",
+        "-reviews.product",
+    )
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255), nullable=False)
@@ -66,7 +79,8 @@ class Product(db.Model, SerializerMixin):
 
     @validates("status")
     def validate_status(self, key, status):
-        if status not in ["available", "out of stock", "reserved", "sold out"]:
+        allowed = ["available", "out of stock", "reserved", "sold out"]
+        if status not in allowed:
             raise ValueError("Invalid product status")
         return status
 
@@ -74,6 +88,7 @@ class Product(db.Model, SerializerMixin):
         return f"<Product {self.name}>"
 
 
+# ------------------ ORDER MODEL ------------------
 class Order(db.Model, SerializerMixin):
     __tablename__ = "orders"
 
@@ -86,20 +101,21 @@ class Order(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     quantity = db.Column(db.Integer, nullable=False, default=1)
 
-    @validates('status')
+    buyer = db.relationship("User", back_populates="orders")
+    order_items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
+
+    @validates("status")
     def validate_status(self, key, status):
         allowed = ["pending", "completed", "cancelled", "shipped", "delivered"]
         if status not in allowed:
             raise ValueError("Invalid order status")
         return status
 
-    buyer = db.relationship("User", back_populates="orders")
-    order_items = db.relationship("OrderItem", back_populates="order", cascade="all, delete-orphan")
-
     def __repr__(self):
-        return f"<Order {self.id} by {self.buyer.username}>"
+        return f"<Order {self.id} by Buyer {self.buyer_id}>"
 
 
+# ------------------ ORDER ITEM MODEL ------------------
 class OrderItem(db.Model, SerializerMixin):
     __tablename__ = "order_items"
 
@@ -118,14 +134,15 @@ class OrderItem(db.Model, SerializerMixin):
         return f"<OrderItem {self.id} for Order {self.order_id}>"
 
 
+# ------------------ REVIEW MODEL ------------------
 class Review(db.Model, SerializerMixin):
     __tablename__ = "reviews"
 
     serialize_rules = (
         "-user.password_hash",
-        "-user.reviews",  
-        "-product.reviews",  
-        "-product.seller.products",  
+        "-user.reviews",
+        "-product.reviews",
+        "-product.seller.products",
     )
 
     id = db.Column(db.Integer, primary_key=True)
@@ -134,14 +151,14 @@ class Review(db.Model, SerializerMixin):
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.Text)
 
-    @validates('rating')
+    user = db.relationship("User", back_populates="reviews")
+    product = db.relationship("Product", back_populates="reviews")
+
+    @validates("rating")
     def validate_rating(self, key, rating):
         if rating < 1 or rating > 5:
             raise ValueError("Rating must be between 1 and 5")
         return rating
-    
-    user = db.relationship("User", back_populates="reviews")
-    product = db.relationship("Product", back_populates="reviews")
 
     def __repr__(self):
-        return f"<Review {self.id} by {self.user.username}>"
+        return f"<Review {self.id} by User {self.user_id}>"
