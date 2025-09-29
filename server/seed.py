@@ -61,7 +61,7 @@ with app.app_context():
         stock=100,
         status="available",
         seller_id=user1.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/a637810c-7039-4274-b9b2-f34993a9427b/image.jpg"
+        image_url="https://plus.unsplash.com/premium_photo-1667047165840-803e47970128?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8bWFpemV8ZW58MHx8MHx8fDA%3D"
         )
     product2 = Product(
         name="Cabbages",
@@ -88,7 +88,7 @@ with app.app_context():
         stock=250,
         status="sold out",
         seller_id=user4.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/0319c633-39bd-46c5-8213-4fa6a8684293/image.jpg"
+        image_url="https://images.unsplash.com/photo-1675501344642-92d35d90fe51?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8cG90YXRvZXN8ZW58MHx8MHx8fDA%3D"
     )
     product5 = Product(
         name="Onions",
@@ -106,7 +106,7 @@ with app.app_context():
         stock=350,
         status="reserved",
         seller_id=user1.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/0042c037-7fd3-44ba-99ad-ea50d4e98bfb/image.jpg"
+        image_url="https://images.unsplash.com/photo-1540148426945-6cf22a6b2383?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Z2FybGljfGVufDB8fDB8fHww"
     )
     product7 = Product(
         name="Sweet Potatoes",
@@ -115,7 +115,7 @@ with app.app_context():
         stock=400,
         status="available",
         seller_id=user2.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/b83763ef-37bf-47f9-9697-90ae7163fa05/image.jpg"
+        image_url="https://images.unsplash.com/photo-1570723735746-c9bd51bd7c40?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3dlZXQlMjBwb3RhdG9lc3xlbnwwfHwwfHx8MA%3D%3D"
     )
     product8 = Product(
         name="Cassava",
@@ -124,7 +124,7 @@ with app.app_context():
         stock=450,
         status="sold out",
         seller_id=user3.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/3e894267-7876-412a-a39a-f6b86d6db812/image.jpg"
+        image_url="https://images.unsplash.com/photo-1757283961570-682154747d9c?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fGNhc3NhdmF8ZW58MHx8MHx8fDA%3D"
     )
     product9 = Product(
         name="Carrot",
@@ -133,7 +133,7 @@ with app.app_context():
         stock=500,
         status="out of stock",
         seller_id=user4.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/b23b1d98-3f9c-43c7-9303-74cd816efe6f/image.jpg"
+        image_url="https://images.unsplash.com/photo-1590868309235-ea34bed7bd7f?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8Y2Fycm90c3xlbnwwfHwwfHx8MA%3D%3D"
     )
     product10 = Product(
         name="Cucumbers",
@@ -142,7 +142,7 @@ with app.app_context():
         stock=550,
         status="available",
         seller_id=user5.id,
-        image_url="https://assets.grok.com/users/8f2f0d28-2e2a-4944-8700-cb09a56bba54/generated/d7196f58-7667-41e8-b566-ba7082fdea65/image.jpg"
+        image_url="https://images.unsplash.com/photo-1449300079323-02e209d9d3a6?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Y3VjdW1iZXJzfGVufDB8fDB8fHww"
     )
     products.extend([product1, product2, product3, product4, product5, product6, product7, product8, product9, product10])
     for product in products:
