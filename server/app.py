@@ -1,21 +1,20 @@
 #!/usr/bin/env python3
 from flask import Flask, request, session, jsonify
+from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_restful import Api, Resource
 from flask_bcrypt import Bcrypt
-
+import os
 from extensions import db
 from config import Config
 from models import User, Product, Order, OrderItem, Review
 
 
 app = Flask(__name__)
-static_foler = "..client/dist/src"
-template_folder = "..client/dist"
-app.config.from_object(Config)
-app.secret_key = "supersecretkey"  
-
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
@@ -358,6 +357,11 @@ api.add_resource(OrderItemsResource, "/order_items")
 api.add_resource(OrderItemResource, "/order_items/<int:item_id>")
 api.add_resource(ReviewsResource, "/reviews")
 api.add_resource(ReviewResource, "/reviews/<int:review_id>")
+
+with app.app_context():
+    db.create_all()
+    print("Database tables created successfully.")
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)
