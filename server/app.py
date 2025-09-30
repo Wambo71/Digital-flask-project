@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 from flask import Flask, request, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -10,12 +9,14 @@ from extensions import db
 from config import Config
 from models import User, Product, Order, OrderItem, Review
 
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy()
+# Configuration
+app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL') or os.getenv('SQLALCHEMY_DATABASE_URI')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-secret-key-change-in-production')
+
+# Initialize extensions
 db.init_app(app)
 migrate = Migrate(app, db)
 api = Api(app)
@@ -123,7 +124,7 @@ class UserResource(Resource):
         db.session.commit()
         return {"message": f"User {user_id} deleted"}, 200
 
-# products
+# Products
 class ProductsResource(Resource):
     def get(self):
         products = Product.query.all()
@@ -179,7 +180,7 @@ class ProductResource(Resource):
         db.session.commit()
         return {"message": f"Product {product_id} deleted"}, 200
 
-#oders
+# Orders
 class OrdersResource(Resource):
     def get(self):
         orders = Order.query.all()
@@ -233,7 +234,8 @@ class OrderResource(Resource):
         db.session.delete(order)
         db.session.commit()
         return {"message": f"Order {order_id} deleted"}, 200
-#order items
+
+# Order Items
 class OrderItemsResource(Resource):
     def get(self):
         items = OrderItem.query.all()
@@ -288,7 +290,7 @@ class OrderItemResource(Resource):
         db.session.commit()
         return {"message": f"Order item {item_id} deleted"}, 200
 
-#reviews
+# Reviews
 class ReviewsResource(Resource):
     def get(self):
         reviews = Review.query.all()
@@ -348,6 +350,7 @@ class ReviewResource(Resource):
         db.session.commit()
         return {"message": f"Review {review_id} deleted"}, 200
 
+# Register API resources
 api.add_resource(UsersResource, "/users")
 api.add_resource(UserResource, "/users/<int:user_id>")
 api.add_resource(ProductsResource, "/products")
@@ -359,10 +362,10 @@ api.add_resource(OrderItemResource, "/order_items/<int:item_id>")
 api.add_resource(ReviewsResource, "/reviews")
 api.add_resource(ReviewResource, "/reviews/<int:review_id>")
 
+# Create tables (useful for development, migrations handle this in production)
 with app.app_context():
     db.create_all()
     print("Database tables created successfully.")
-
 
 if __name__ == "__main__":
     app.run(debug=True, port=5500)
