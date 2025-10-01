@@ -45,6 +45,7 @@ function CheckoutForm() {
                 <option value="">Select</option>
                 <option value="credit">Credit Card</option>
                 <option value="paypal">PayPal</option>
+                <option value="mpesa">Mpesa</option>
                 <option value="cash">Cash on Delivery</option>
               </Field>
               {errors.payment && touched.payment ? (

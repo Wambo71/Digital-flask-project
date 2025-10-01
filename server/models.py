@@ -71,7 +71,7 @@ class Product(db.Model, SerializerMixin):
     stock = db.Column(db.Integer, nullable=False, default=0)
     status = db.Column(db.String(50), nullable=False, default="available")
     seller_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
-    image_url = db.Column(db.Text(300))
+    image_url = db.Column(db.Text(500))
 
     seller = db.relationship("User", back_populates="products")
     order_items = db.relationship("OrderItem", back_populates="product", cascade="all, delete-orphan")

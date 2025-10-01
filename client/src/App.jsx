@@ -9,7 +9,6 @@ import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
 import Login from "./pages/LoginPage";
 import SignUp from "./pages/SignUp";
-import Dashboard from "./pages/Dashboard";
 import Profile from "./pages/Profile";
 import AddProduct from "./pages/AddProduct";
 import ProtectedRoute from "./components/ProtectedRoutes";
@@ -50,14 +49,6 @@ function App() {
           element={
             <ProtectedRoute>
               <Profile />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
             </ProtectedRoute>
           }
         />

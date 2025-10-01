@@ -146,7 +146,8 @@ class ProductsResource(Resource):
             description=data.get("description"),
             price=price,
             seller_id=seller_id,
-            stock=data.get("stock", 0)
+            stock=data.get("stock", 0),
+            image_url=data.get("image_url")
         )
         db.session.add(new_product)
         db.session.commit()
@@ -169,6 +170,7 @@ class ProductResource(Resource):
         product.description = data.get("description", product.description)
         product.price = data.get("price", product.price)
         product.stock = data.get("stock", product.stock)
+        product.image_url = data.get("image_url", product.image_url)
 
         db.session.commit()
         return product.to_dict(), 200

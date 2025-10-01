@@ -9,7 +9,7 @@ function NavBar() {
       <NavLink to="/products" className="nav-link">Products</NavLink>
       <NavLink to="/add-product" className="nav-link">Add Products</NavLink>
       <NavLink to="/cart" className="nav-link">Cart</NavLink>
-      <NavLink to="/dashboard" className="nav-link">Dashboard</NavLink>
+      <NavLink to="/profile" className="nav-link">Profile</NavLink>
     </nav>
   );
 }

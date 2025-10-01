@@ -6,7 +6,6 @@ function Checkout() {
       <h1>Checkout</h1>
       
         <CheckoutForm/>
-        <button type="submit">Place Order</button>
       
     </div>
   );

@@ -5,9 +5,9 @@ function Home() {
 
   return (
     <div>
-      <h1>Welcome to My Shop</h1>
+      <h1>Welcome to Digital Marketplace</h1>
       <p>Your one stop place for shopping online!!!</p>
-      <button onClick={() => navigate("/signup")}>Go to SignUp</button>
+      <button className="button" onClick={() => navigate("/signup")}>Go to SignUp</button>
     </div>
   );
 }
